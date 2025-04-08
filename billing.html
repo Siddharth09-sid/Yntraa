@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .billing-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .billing-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .billing-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .billing-tab:hover:not(.active) {
+            border-bottom-color: var(--border);
+        }
+        
+        .billing-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        
+        .billing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .billing-period {
+            font-weight: 500;
+        }
+        
+        .billing-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .billing-summary {
+            display: flex;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            gap: 2rem;
+        }
+        
+        .summary-card {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 6px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+        }
+        
+        .summary-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .summary-value.paid {
+            color: var(--success);
+        }
+        
+        .summary-value.due {
+            color: var(--primary);
+        }
+        
+        .summary-value.overdue {
+            color: var(--danger);
+        }
+        
+        .billing-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .billing-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background-color: var(--bg-light);
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .billing-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .billing-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .billing-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.paid {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-badge.pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-badge.overdue {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .invoice-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .invoice-actions .btn {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .payment-methods {
+            padding: 1.5rem;
+        }
+        
+        .payment-methods-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-cards {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .payment-card {
+            flex: 1;
+            min-width: 300px;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-light);
+            position: relative;
+        }
+        
+        .payment-card-default {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .payment-card-default-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        
+        .card-type {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-type-icon {
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .card-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-number {
+            font-family: monospace;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-expiry {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .billing-history {
+            padding: 1.5rem;
+        }
+        
+        .billing-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .usage-container {
+            padding: 1.5rem;
+        }
+        
+        .usage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .usage-chart {
+            height: 300px;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .usage-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .usage-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-light);
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .usage-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .usage-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .usage-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .billing-summary {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .payment-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li>
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li class="active">
+                <a href="./billing.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Billing</a>
+                <span class="separator">/</span>
+                <span>Overview</span>
+            </div>
+            <h1 class="page-title">Billing</h1>
+        </div>
+        
+        <div class="billing-tabs">
+            <div class="billing-tab active" data-tab="overview">Overview</div>
+            <div class="billing-tab" data-tab="invoices">Invoices</div>
+            <div class="billing-tab" data-tab="payment-methods">Payment Methods</div>
+            <div class="billing-tab" data-tab="usage">Usage</div>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div class="billing-container" id="overviewTab">
+            <div class="billing-header">
+                <div class="billing-period">Current Billing Period: June 1 - June 30, 2023</div>
+                <div class="billing-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Funds
+                    </button>
+                </div>
+            </div>
+            
+            <div class="billing-summary">
+                <div class="summary-card">
+                    <div class="summary-title">Current Balance</div>
+                    <div class="summary-value due">$245.80</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">Total Paid This Month</div>
+                    <div class="summary-value paid">$1,245.50</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">Estimated Next Bill</div>
+                    <div class="summary-value">$1,089.20</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">Overdue</div>
+                    <div class="summary-value overdue">$0.00</div>
+                </div>
+            </div>
+            
+            <div class="payment-methods">
+                <div class="payment-methods-header">
+                    <h3>Payment Methods</h3>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-plus"></i> Add Payment Method
+                    </button>
+                </div>
+                
+                <div class="payment-cards">
+                    <div class="payment-card payment-card-default">
+                        <span class="payment-card-default-badge">Default</span>
+                        <div class="card-type">
+                            <i class="fab fa-cc-visa card-type-icon"></i>
+                            <span>Visa</span>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">•••• •••• •••• 4242</div>
+                            <div class="card-expiry">Expires 08/2025</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-outline">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card">
+                        <div class="card-type">
+                            <i class="fab fa-cc-mastercard card-type-icon"></i>
+                            <span>Mastercard</span>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">•••• •••• •••• 5555</div>
+                            <div class="card-expiry">Expires 03/2024</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">Make Default</button>
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-outline">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="billing-history">
+                <div class="billing-history-header">
+                    <h3>Recent Invoices</h3>
+                    <button class="btn btn-outline">
+                        View All
+                    </button>
+                </div>
+                
+                <table class="billing-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>INV-2023-06-001</td>
+                            <td>June 1, 2023</td>
+                            <td>$1,245.50</td>
+                            <td><span class="status-badge paid">Paid</span></td>
+                            <td>
+                                <div class="invoice-actions">
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2023-05-001</td>
+                            <td>May 1, 2023</td>
+                            <td>$1,189.75</td>
+                            <td><span class="status-badge paid">Paid</span></td>
+                            <td>
+                                <div class="invoice-actions">
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2023-04-001</td>
+                            <td>April 1, 2023</td>
+                            <td>$987.30</td>
+                            <td><span class="status-badge paid">Paid</span></td>
+                            <td>
+                                <div class="invoice-actions">
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="btn btn-outline">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Invoices Tab -->
+        <div class="billing-container hidden" id="invoicesTab">
+            <div class="billing-header">
+                <div class="billing-period">All Invoices</div>
+                <div class="billing-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </div>
+            
+            <table class="billing-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Date</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>INV-2023-06-001</td>
+                        <td>June 1, 2023</td>
+                        <td>June 2023</td>
+                        <td>$1,245.50</td>
+                        <td><span class="status-badge paid">Paid</span></td>
+                        <td>
+                            <div class="invoice-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>INV-2023-05-001</td>
+                        <td>May 1, 2023</td>
+                        <td>May 2023</td>
+                        <td>$1,189.75</td>
+                        <td><span class="status-badge paid">Paid</span></td>
+                        <td>
+                            <div class="invoice-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>INV-2023-04-001</td>
+                        <td>April 1, 2023</td>
+                        <td>April 2023</td>
+                        <td>$987.30</td>
+                        <td><span class="status-badge paid">Paid</span></td>
+                        <td>
+                            <div class="invoice-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>INV-2023-03-001</td>
+                        <td>March 1, 2023</td>
+                        <td>March 2023</td>
+                        <td>$876.45</td>
+                        <td><span class="status-badge paid">Paid</span></td>
+                        <td>
+                            <div class="invoice-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>INV-2023-02-001</td>
+                        <td>February 1, 2023</td>
+                        <td>February 2023</td>
+                        <td>$765.20</td>
+                        <td><span class="status-badge paid">Paid</span></td>
+                        <td>
+                            <div class="invoice-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Payment Methods Tab -->
+        <div class="billing-container hidden" id="paymentMethodsTab">
+            <div class="billing-header">
+                <div class="billing-period">Payment Methods</div>
+                <div class="billing-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Payment Method
+                    </button>
+                </div>
+            </div>
+            
+            <div class="payment-methods">
+                <div class="payment-cards">
+                    <div class="payment-card payment-card-default">
+                        <span class="payment-card-default-badge">Default</span>
+                        <div class="card-type">
+                            <i class="fab fa-cc-visa card-type-icon"></i>
+                            <span>Visa</span>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">•••• •••• •••• 4242</div>
+                            <div class="card-expiry">Expires 08/2025</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-outline">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card">
+                        <div class="card-type">
+                            <i class="fab fa-cc-mastercard card-type-icon"></i>
+                            <span>Mastercard</span>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">•••• •••• •••• 5555</div>
+                            <div class="card-expiry">Expires 03/2024</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">Make Default</button>
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-outline">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card">
+                        <div class="card-type">
+                            <i class="fab fa-cc-amex card-type-icon"></i>
+                            <span>American Express</span>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">•••• •••• •••• 1005</div>
+                            <div class="card-expiry">Expires 11/2023</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-outline">Make Default</button>
+                            <button class="btn btn-outline">Edit</button>
+                            <button class="btn btn-outline">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usage Tab -->
+        <div class="billing-container hidden" id="usageTab">
+            <div class="billing-header">
+                <div class="billing-period">Current Billing Period: June 1 - June 30, 2023</div>
+                <div class="billing-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </div>
+            
+            <div class="usage-container">
+                <div class="usage-header">
+                    <h3>Resource Usage</h3>
+                    <div class="billing-actions">
+                        <select class="btn btn-outline">
+                            <option>Last 30 Days</option>
+                            <option>Last 60 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="usage-chart">
+                    [Usage Chart Visualization]
+                </div>
+                
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Resource</th>
+                            <th>Usage</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Compute</td>
+                            <td>Virtual Machines</td>
+                            <td>720 hours</td>
+                            <td>$576.00</td>
+                        </tr>
+                        <tr>
+                            <td>Storage</td>
+                            <td>Block Storage</td>
+                            <td>2.5 TB</td>
+                            <td>$125.00</td>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>Managed PostgreSQL</td>
+                            <td>450 hours</td>
+                            <td>$225.00</td>
+                        </tr>
+                        <tr>
+                            <td>Network</td>
+                            <td>Load Balancer</td>
+                            <td>720 hours</td>
+                            <td>$72.00</td>
+                        </tr>
+                        <tr>
+                            <td>Monitoring</td>
+                            <td>Monitoring Pro</td>
+                            <td>50 resources</td>
+                            <td>$180.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.billing-tab');
+            const tabContents = {
+                overview: document.getElementById('overviewTab'),
+                invoices: document.getElementById('invoicesTab'),
+                'payment-methods': document.getElementById('paymentMethodsTab'),
+                usage: document.getElementById('usageTab')
+            };
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    Object.values(tabContents).forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.dataset.tab;
+                    tabContents[tabId].classList.remove('hidden');
+                });
+            });
+            
+            // Payment method actions
+            document.querySelectorAll('.card-actions .btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const action = this.textContent.trim();
+                    const card = this.closest('.payment-card');
+                    
+                    if (action === 'Make Default') {
+                        document.querySelectorAll('.payment-card').forEach(c => {
+                            c.classList.remove('payment-card-default');
+                            c.querySelector('.payment-card-default-badge')?.remove();
+                        });
+                        
+                        card.classList.add('payment-card-default');
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'payment-card-default-badge';
+                        badge.textContent = 'Default';
+                        card.prepend(badge);
+                        
+                        alert('Default payment method updated');
+                    } else if (action === 'Edit') {
+                        alert('Editing payment method');
+                    } else if (action === 'Remove') {
+                        if (confirm('Are you sure you want to remove this payment method?')) {
+                            card.remove();
+                        }
+                    }
+                });
+            });
+            
+            // Invoice actions
+            document.querySelectorAll('.invoice-actions .btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.querySelector('i').className;
+                    
+                    if (action.includes('download')) {
+                        alert('Downloading invoice...');
+                    } else if (action.includes('print')) {
+                        alert('Printing invoice...');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Network - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .creation-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        
+        .step {
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 20px;
+            height: 1px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+            z-index: 2;
+        }
+        
+        .step.completed {
+            background-color: #e8f0fe;
+            color: var(--primary);
+            z-index: 2;
+        }
+        
+        .step.inactive {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .form-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-header i {
+            color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 200px;
+            flex: 1;
+        }
+        
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .radio-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-top: 0.2rem;
+        }
+        
+        .radio-option-content {
+            flex: 1;
+        }
+        
+        .radio-option-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .radio-option-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .summary-label {
+            color: var(--text-light);
+        }
+        
+        .summary-value {
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .total-cost {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .sku-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .sku-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .sku-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .sku-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .sku-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .review-section {
+            margin-bottom: 2rem;
+        }
+        
+        .review-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .review-section h3 i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .review-details {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .review-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-label {
+            width: 150px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .review-value {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .deploy-status {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .deploy-status i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .deploy-status h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .deploy-status p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 0.5s;
+        }
+        
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-toggle:hover {
+            border-color: var(--primary);
+        }
+        
+        .feature-toggle.active {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .feature-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .feature-name {
+            font-weight: 500;
+        }
+        
+        .feature-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .feature-price {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li >
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li class="active">
+               <a href="./postloginnetwork.html" style="color: #283e81;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li >
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Network</a>
+                <span class="separator">/</span>
+                <span>Create Network</span>
+            </div>
+            <h1 class="page-title">Create Network Service</h1>
+            <button class="btn btn-outline">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+        
+        <div class="creation-steps">
+            <div class="step active" id="step1">1. Configure</div>
+            <div class="step inactive" id="step2">2. Review</div>
+            <div class="step inactive" id="step3">3. Deploy</div>
+        </div>
+        
+        <!-- Configure Step -->
+        <div class="form-container" id="configureStep">
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-cog"></i> Basic Configuration
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="network-name">Network Name</label>
+                        <input type="text" id="network-name" placeholder="e.g., production-network">
+                        <p class="form-hint">This name will be used to identify your network</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="region">Region</label>
+                        <select id="region">
+                            <option value="">Select Region</option>
+                            <option value="us-east-1">US East (N. Virginia)</option>
+                            <option value="us-west-1">US West (N. California)</option>
+                            <option value="eu-central-1">Europe (Frankfurt)</option>
+                            <option value="ap-south-1">Asia Pacific (Mumbai)</option>
+                        </select>
+                        <p class="form-hint">Choose a region closest to your users for better performance</p>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="network-type">Network Type</label>
+                        <select id="network-type">
+                            <option value="">Select Network Type</option>
+                            <option value="vpc">Virtual Private Cloud (VPC)</option>
+                            <option value="vlan">Virtual LAN (VLAN)</option>
+                            <option value="cdn">Content Delivery Network (CDN)</option>
+                            <option value="vpn">Virtual Private Network (VPN)</option>
+                            <option value="load-balancer">Load Balancer</option>
+                            <option value="direct-connect">Direct Connect</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="network-tier">Network Tier</label>
+                        <select id="network-tier" disabled>
+                            <option value="">Select Tier</option>
+                            <!-- Tiers will be populated based on network type selection -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-network-wired"></i> Network Specifications
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ip-version">IP Version</label>
+                        <select id="ip-version">
+                            <option value="ipv4">IPv4</option>
+                            <option value="ipv6">IPv6</option>
+                            <option value="dual-stack">Dual Stack (IPv4 + IPv6)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidr-block">CIDR Block</label>
+                        <input type="text" id="cidr-block" placeholder="e.g., 10.0.0.0/16">
+                        <p class="form-hint">The IP range for your network in CIDR notation</p>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bandwidth">Bandwidth</label>
+                        <select id="bandwidth">
+                            <option value="100mbps">100 Mbps ($0.05/hour)</option>
+                            <option value="1gbps">1 Gbps ($0.20/hour)</option>
+                            <option value="10gbps">10 Gbps ($1.50/hour)</option>
+                            <option value="40gbps">40 Gbps ($5.00/hour)</option>
+                            <option value="100gbps">100 Gbps ($10.00/hour)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="throughput">Throughput Guarantee</label>
+                        <select id="throughput">
+                            <option value="best-effort">Best Effort (No guarantee)</option>
+                            <option value="50percent">50% Guaranteed (+$0.02/hour)</option>
+                            <option value="90percent">90% Guaranteed (+$0.05/hour)</option>
+                            <option value="100percent">100% Guaranteed (+$0.10/hour)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Subnets</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="subnets" value="automatic" checked>
+                                <div class="radio-option-content">
+                                    <div class="radio-option-title">Automatic</div>
+                                    <div class="radio-option-description">We'll automatically create subnets across availability zones</div>
+                                </div>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="subnets" value="manual">
+                                <div class="radio-option-content">
+                                    <div class="radio-option-title">Manual</div>
+                                    <div class="radio-option-description">You'll specify subnets and their CIDR blocks</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-shield-alt"></i> Security Configuration
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firewall">Firewall</label>
+                        <select id="firewall">
+                            <option value="basic">Basic Firewall ($0.02/hour)</option>
+                            <option value="advanced">Advanced Firewall ($0.05/hour)</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ddos-protection">DDoS Protection</label>
+                        <select id="ddos-protection">
+                            <option value="basic">Basic Protection ($0.03/hour)</option>
+                            <option value="advanced">Advanced Protection ($0.10/hour)</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="encryption">Encryption</label>
+                        <select id="encryption">
+                            <option value="enabled">Enabled (TLS 1.2+) ($0.01/hour)</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-star"></i> Advanced Features
+                </h2>
+                <div class="feature-toggle" id="monitoringToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Advanced Monitoring</div>
+                        <div class="feature-description">Enhanced network metrics, alerts, and performance insights</div>
+                    </div>
+                    <div class="feature-price">$0.03/hour</div>
+                    <input type="checkbox" id="monitoring" style="display: none;">
+                </div>
+                
+                <div class="feature-toggle" id="loggingToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Flow Logging</div>
+                        <div class="feature-description">Log all network traffic for security and compliance</div>
+                    </div>
+                    <div class="feature-price">$0.02/hour + $0.10/GB stored</div>
+                    <input type="checkbox" id="logging" style="display: none;">
+                </div>
+                
+                <div class="feature-toggle" id="slaToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Enhanced SLA</div>
+                        <div class="feature-description">99.99% uptime guarantee with financial penalties</div>
+                    </div>
+                    <div class="feature-price">15% of total cost</div>
+                    <input type="checkbox" id="sla" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-headset"></i> Support Tier
+                </h2>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="basic" checked>
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Basic Support</div>
+                            <div class="radio-option-description">24-48 hour response time, business hours</div>
+                            <div class="radio-option-description">Included in base price</div>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="standard">
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Standard Support</div>
+                            <div class="radio-option-description">12-24 hour response time, 24/7 coverage</div>
+                            <div class="radio-option-description">8% of total monthly cost</div>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="premium">
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Premium Support</div>
+                            <div class="radio-option-description">1 hour response time, 24/7 with dedicated engineer</div>
+                            <div class="radio-option-description">15% of total monthly cost</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h2 class="summary-header">
+                    <i class="fas fa-receipt"></i> Cost Summary
+                </h2>
+                <div class="summary-row">
+                    <span class="summary-label">Network Type:</span>
+                    <span class="summary-value" id="summary-network-type">Not selected</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Bandwidth:</span>
+                    <span class="summary-value" id="summary-bandwidth">100 Mbps</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Throughput:</span>
+                    <span class="summary-value" id="summary-throughput">Best Effort</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Security:</span>
+                    <span class="summary-value" id="summary-security">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Advanced Features:</span>
+                    <span class="summary-value" id="summary-features">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Support:</span>
+                    <span class="summary-value" id="summary-support">Basic ($0/month)</span>
+                </div>
+                <div class="total-cost">
+                    <span>Estimated Monthly Cost:</span>
+                    <span id="total-cost">$0.00</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-outline">
+                    <i class="fas fa-save"></i> Save as Draft
+                </button>
+                <button class="btn btn-primary" id="nextBtn">
+                    Next: Review <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Review Step (initially hidden) -->
+        <div class="form-container" id="reviewStep" style="display: none;">
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-check-circle"></i> Review Your Configuration
+                </h3>
+                <p>Please review your network configuration before deployment.</p>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-cog"></i> Basic Configuration
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Network Name:</div>
+                        <div class="review-value" id="review-network-name">production-network</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Region:</div>
+                        <div class="review-value" id="review-region">US East (N. Virginia)</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Network Type:</div>
+                        <div class="review-value" id="review-network-type">Virtual Private Cloud (VPC)</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Network Tier:</div>
+                        <div class="review-value" id="review-network-tier">Standard</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-network-wired"></i> Network Specifications
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">IP Version:</div>
+                        <div class="review-value" id="review-ip-version">IPv4</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">CIDR Block:</div>
+                        <div class="review-value" id="review-cidr-block">10.0.0.0/16</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Bandwidth:</div>
+                        <div class="review-value" id="review-bandwidth">1 Gbps</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Throughput:</div>
+                        <div class="review-value" id="review-throughput">Best Effort</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Subnets:</div>
+                        <div class="review-value" id="review-subnets">Automatic</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-shield-alt"></i> Security Configuration
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Firewall:</div>
+                        <div class="review-value" id="review-firewall">Basic Firewall</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">DDoS Protection:</div>
+                        <div class="review-value" id="review-ddos-protection">Basic Protection</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Encryption:</div>
+                        <div class="review-value" id="review-encryption">Enabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-star"></i> Advanced Features
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Advanced Monitoring:</div>
+                        <div class="review-value" id="review-monitoring">Disabled</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Flow Logging:</div>
+                        <div class="review-value" id="review-logging">Disabled</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Enhanced SLA:</div>
+                        <div class="review-value" id="review-sla">Disabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-headset"></i> Support Tier
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Support Level:</div>
+                        <div class="review-value" id="review-support">Basic Support</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h2 class="summary-header">
+                    <i class="fas fa-receipt"></i> Final Cost Summary
+                </h2>
+                <div class="summary-row">
+                    <span class="summary-label">Network Type:</span>
+                    <span class="summary-value" id="final-network-type">Virtual Private Cloud (VPC)</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Bandwidth:</span>
+                    <span class="summary-value" id="final-bandwidth">1 Gbps</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Throughput:</span>
+                    <span class="summary-value" id="final-throughput">Best Effort</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Security:</span>
+                    <span class="summary-value" id="final-security">$50.40</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Advanced Features:</span>
+                    <span class="summary-value" id="final-features">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Support:</span>
+                    <span class="summary-value" id="final-support">Basic ($0/month)</span>
+                </div>
+                <div class="total-cost">
+                    <span>Total Monthly Cost:</span>
+                    <span id="final-total-cost">$350.40</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-primary" id="deployBtn">
+                    <i class="fas fa-rocket"></i> Deploy Network
+                </button>
+            </div>
+        </div>
+        
+        <!-- Deploy Step (initially hidden) -->
+        <div class="form-container" id="deployStep" style="display: none;">
+            <div class="deploy-status">
+                <i class="fas fa-cog fa-spin"></i>
+                <h2>Deploying Your Network</h2>
+                <p>Your network service is being provisioned. This process typically takes 2-5 minutes. You can close this page and we'll notify you when your network is ready.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="deployProgress"></div>
+                </div>
+                
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Network Name:</div>
+                        <div class="review-value" id="deploy-network-name">production-network</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Region:</div>
+                        <div class="review-value" id="deploy-region">US East (N. Virginia)</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Estimated Completion:</div>
+                        <div class="review-value">1 minute</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons" style="justify-content: center;">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-external-link-alt"></i> View Deployment Logs
+                    </button>
+                    <button class="btn btn-primary" id="dashboardBtn">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Network tiers by type
+        const networkTiers = {
+            vpc: [
+                { value: 'standard', label: 'Standard VPC' },
+                { value: 'enterprise', label: 'Enterprise VPC' },
+                { value: 'isolated', label: 'Isolated VPC' }
+            ],
+            vlan: [
+                { value: 'standard', label: 'Standard VLAN' },
+                { value: 'premium', label: 'Premium VLAN' }
+            ],
+            cdn: [
+                { value: 'basic', label: 'Basic CDN' },
+                { value: 'advanced', label: 'Advanced CDN' },
+                { value: 'global', label: 'Global CDN' }
+            ],
+            vpn: [
+                { value: 'site-to-site', label: 'Site-to-Site VPN' },
+                { value: 'client', label: 'Client VPN' },
+                { value: 'ipsec', label: 'IPSec VPN' }
+            ],
+            'load-balancer': [
+                { value: 'application', label: 'Application Load Balancer' },
+                { value: 'network', label: 'Network Load Balancer' },
+                { value: 'gateway', label: 'Gateway Load Balancer' }
+            ],
+            'direct-connect': [
+                { value: '1gbps', label: '1 Gbps Direct Connect' },
+                { value: '10gbps', label: '10 Gbps Direct Connect' }
+            ]
+        };
+
+        // Bandwidth prices (per hour)
+        const bandwidthPrices = {
+            '100mbps': 0.05,
+            '1gbps': 0.20,
+            '10gbps': 1.50,
+            '40gbps': 5.00,
+            '100gbps': 10.00
+        };
+
+        // Throughput guarantee prices (additional per hour)
+        const throughputPrices = {
+            'best-effort': 0,
+            '50percent': 0.02,
+            '90percent': 0.05,
+            '100percent': 0.10
+        };
+
+        // Security prices (per hour)
+        const securityPrices = {
+            'firewall': {
+                'basic': 0.02,
+                'advanced': 0.05,
+                'none': 0
+            },
+            'ddos': {
+                'basic': 0.03,
+                'advanced': 0.10,
+                'none': 0
+            },
+            'encryption': 0.01
+        };
+
+        // Advanced features prices
+        const featurePrices = {
+            'monitoring': 0.03,    // per hour
+            'logging': 0.02,       // per hour + $0.10/GB stored
+            'sla': 0.15            // 15% of total cost
+        };
+
+        // DOM elements
+        const networkTypeSelect = document.getElementById('network-type');
+        const networkTierSelect = document.getElementById('network-tier');
+        const bandwidthSelect = document.getElementById('bandwidth');
+        const throughputSelect = document.getElementById('throughput');
+        const firewallSelect = document.getElementById('firewall');
+        const ddosSelect = document.getElementById('ddos-protection');
+        const encryptionSelect = document.getElementById('encryption');
+        const configureStep = document.getElementById('configureStep');
+        const reviewStep = document.getElementById('reviewStep');
+        const deployStep = document.getElementById('deployStep');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const deployBtn = document.getElementById('deployBtn');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const monitoringToggle = document.getElementById('monitoringToggle');
+        const loggingToggle = document.getElementById('loggingToggle');
+        const slaToggle = document.getElementById('slaToggle');
+        const monitoringCheckbox = document.getElementById('monitoring');
+        const loggingCheckbox = document.getElementById('logging');
+        const slaCheckbox = document.getElementById('sla');
+
+        // Update network tiers based on selected network type
+        function updateNetworkTiers() {
+            const selectedType = networkTypeSelect.value;
+            networkTierSelect.innerHTML = '<option value="">Select Tier</option>';
+            
+            if (selectedType && networkTiers[selectedType]) {
+                networkTierSelect.disabled = false;
+                networkTiers[selectedType].forEach(tier => {
+                    const option = document.createElement('option');
+                    option.value = tier.value;
+                    option.textContent = tier.label;
+                    networkTierSelect.appendChild(option);
+                });
+            } else {
+                networkTierSelect.disabled = true;
+            }
+            
+            updateCostSummary();
+        }
+
+        // Toggle feature selection
+        function toggleFeature(toggleElement, checkbox) {
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                toggleElement.classList.add('active');
+            } else {
+                toggleElement.classList.remove('active');
+            }
+            updateCostSummary();
+        }
+
+        // Calculate bandwidth cost
+        function calculateBandwidthCost() {
+            const bandwidth = bandwidthSelect.value;
+            const throughput = throughputSelect.value;
+            
+            const bandwidthPrice = bandwidthPrices[bandwidth] || 0;
+            const throughputPrice = throughputPrices[throughput] || 0;
+            
+            // Bandwidth and throughput prices are per hour * hours in month (730)
+            return (bandwidthPrice + throughputPrice) * 730;
+        }
+
+        // Calculate security cost
+        function calculateSecurityCost() {
+            const firewall = firewallSelect.value;
+            const ddos = ddosSelect.value;
+            const encryption = encryptionSelect.value;
+            
+            const firewallPrice = securityPrices.firewall[firewall] || 0;
+            const ddosPrice = securityPrices.ddos[ddos] || 0;
+            const encryptionPrice = encryption === 'enabled' ? securityPrices.encryption : 0;
+            
+            // Security prices are per hour * hours in month (730)
+            return (firewallPrice + ddosPrice + encryptionPrice) * 730;
+        }
+
+        // Calculate advanced features cost
+        function calculateFeaturesCost() {
+            let total = 0;
+            
+            // Advanced monitoring
+            if (monitoringCheckbox.checked) {
+                total += featurePrices.monitoring * 730; // per hour
+            }
+            
+            // Flow logging (assuming 10GB stored for calculation)
+            if (loggingCheckbox.checked) {
+                total += featurePrices.logging * 730 + 0.10 * 10; // per hour + per GB
+            }
+            
+            return total;
+        }
+
+        // Update cost summary based on selections
+        function updateCostSummary() {
+            // Get selected values
+            const networkType = networkTypeSelect.value;
+            const bandwidth = bandwidthSelect.value;
+            const throughput = throughputSelect.value;
+            const support = document.querySelector('input[name="support"]:checked')?.value || 'basic';
+            
+            // Calculate costs
+            const bandwidthCost = calculateBandwidthCost();
+            const securityCost = calculateSecurityCost();
+            const featuresCost = calculateFeaturesCost();
+            
+            // Calculate subtotal before support and SLA
+            const subtotal = bandwidthCost + securityCost + featuresCost;
+            
+            // Calculate support cost
+            let supportCost = 0;
+            let supportText = 'Basic ($0/month)';
+            
+            if (support === 'standard') {
+                supportCost = subtotal * 0.08;
+                supportText = `Standard ($${supportCost.toFixed(2)}/month)`;
+            } else if (support === 'premium') {
+                supportCost = subtotal * 0.15;
+                supportText = `Premium ($${supportCost.toFixed(2)}/month)`;
+            }
+            
+            // Calculate SLA cost if enabled
+            let slaCost = 0;
+            if (slaCheckbox.checked) {
+                slaCost = subtotal * featurePrices.sla;
+            }
+            
+            // Total cost
+            const totalCost = subtotal + supportCost + slaCost;
+            
+            // Update summary
+            document.getElementById('summary-network-type').textContent = 
+                networkType ? `${networkTypeSelect.options[networkTypeSelect.selectedIndex].text}` : 'Not selected';
+            
+            document.getElementById('summary-bandwidth').textContent = 
+                bandwidthSelect.options[bandwidthSelect.selectedIndex].text.split(' ')[0];
+            
+            document.getElementById('summary-throughput').textContent = 
+                throughputSelect.options[throughputSelect.selectedIndex].text.split(' ')[0];
+            
+            document.getElementById('summary-security').textContent = `$${securityCost.toFixed(2)}`;
+            document.getElementById('summary-features').textContent = `$${featuresCost.toFixed(2)}`;
+            document.getElementById('summary-support').textContent = supportText;
+            
+            document.getElementById('total-cost').textContent = `$${totalCost.toFixed(2)}`;
+        }
+
+        // Show review step
+        function showReviewStep() {
+            // Update review fields with current selections
+            document.getElementById('review-network-name').textContent = document.getElementById('network-name').value || 'Not specified';
+            document.getElementById('review-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            document.getElementById('review-network-type').textContent = document.getElementById('network-type').options[document.getElementById('network-type').selectedIndex].text;
+            document.getElementById('review-network-tier').textContent = document.getElementById('network-tier').options[document.getElementById('network-tier').selectedIndex].text;
+            document.getElementById('review-ip-version').textContent = document.getElementById('ip-version').options[document.getElementById('ip-version').selectedIndex].text;
+            document.getElementById('review-cidr-block').textContent = document.getElementById('cidr-block').value || 'Not specified';
+            document.getElementById('review-bandwidth').textContent = document.getElementById('bandwidth').options[document.getElementById('bandwidth').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-throughput').textContent = document.getElementById('throughput').options[document.getElementById('throughput').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-subnets').textContent = document.querySelector('input[name="subnets"]:checked').value === 'automatic' ? 'Automatic' : 'Manual';
+            document.getElementById('review-firewall').textContent = document.getElementById('firewall').options[document.getElementById('firewall').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-ddos-protection').textContent = document.getElementById('ddos-protection').options[document.getElementById('ddos-protection').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-encryption').textContent = document.getElementById('encryption').options[document.getElementById('encryption').selectedIndex].text.split(' ')[0];
+            
+            // Update advanced features review
+            document.getElementById('review-monitoring').textContent = monitoringCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-logging').textContent = loggingCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-sla').textContent = slaCheckbox.checked ? 'Enabled' : 'Disabled';
+            
+            // Support level
+            let supportText = 'Basic Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'standard') supportText = 'Standard Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'premium') supportText = 'Premium Support';
+            document.getElementById('review-support').textContent = supportText;
+            
+            // Update final cost summary
+            document.getElementById('final-network-type').textContent = document.getElementById('summary-network-type').textContent;
+            document.getElementById('final-bandwidth').textContent = document.getElementById('summary-bandwidth').textContent;
+            document.getElementById('final-throughput').textContent = document.getElementById('summary-throughput').textContent;
+            document.getElementById('final-security').textContent = document.getElementById('summary-security').textContent;
+            document.getElementById('final-features').textContent = document.getElementById('summary-features').textContent;
+            document.getElementById('final-support').textContent = document.getElementById('summary-support').textContent;
+            document.getElementById('final-total-cost').textContent = document.getElementById('total-cost').textContent;
+            
+            // Update deployment step with network name and region
+            document.getElementById('deploy-network-name').textContent = document.getElementById('network-name').value || 'production-network';
+            document.getElementById('deploy-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            
+            // Show review step and update progress
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'block';
+            deployStep.style.display = 'none';
+            
+            step1.classList.remove('active');
+            step1.classList.add('completed');
+            step2.classList.remove('inactive');
+            step2.classList.add('active');
+        }
+
+        // Show configure step
+        function showConfigureStep() {
+            configureStep.style.display = 'block';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'none';
+            
+            step1.classList.add('active');
+            step1.classList.remove('completed');
+            step2.classList.remove('active');
+            step2.classList.add('inactive');
+        }
+
+        // Show deploy step
+        function showDeployStep() {
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'block';
+            
+            step1.classList.add('completed');
+            step2.classList.add('completed');
+            step3.classList.remove('inactive');
+            step3.classList.add('active');
+            
+            // Simulate deployment progress
+            const progressBar = document.getElementById('deployProgress');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // In a real app, you would check actual deployment status
+                }
+            }, 300);
+        }
+
+        // Go to dashboard
+        function goToDashboard() {
+            alert('Redirecting to dashboard. In a real application, this would navigate to the dashboard page.');
+            // window.location.href = '/dashboard';
+        }
+
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            networkTypeSelect.addEventListener('change', updateNetworkTiers);
+            bandwidthSelect.addEventListener('change', updateCostSummary);
+            throughputSelect.addEventListener('change', updateCostSummary);
+            firewallSelect.addEventListener('change', updateCostSummary);
+            ddosSelect.addEventListener('change', updateCostSummary);
+            encryptionSelect.addEventListener('change', updateCostSummary);
+            nextBtn.addEventListener('click', showReviewStep);
+            backBtn.addEventListener('click', showConfigureStep);
+            deployBtn.addEventListener('click', showDeployStep);
+            dashboardBtn.addEventListener('click', goToDashboard);
+            
+            // Feature toggle event listeners
+            monitoringToggle.addEventListener('click', () => toggleFeature(monitoringToggle, monitoringCheckbox));
+            loggingToggle.addEventListener('click', () => toggleFeature(loggingToggle, loggingCheckbox));
+            slaToggle.addEventListener('click', () => toggleFeature(slaToggle, slaCheckbox));
+            
+            // Initial setup
+            updateNetworkTiers();
+            updateCostSummary();
+        });
+    </script>
+</body>
+</html>

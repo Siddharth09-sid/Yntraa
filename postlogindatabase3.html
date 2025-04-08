@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Database - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .creation-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        
+        .step {
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 20px;
+            height: 1px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+            z-index: 2;
+        }
+        
+        .step.completed {
+            background-color: #e8f0fe;
+            color: var(--primary);
+            z-index: 2;
+        }
+        
+        .step.inactive {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .form-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-header i {
+            color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 200px;
+            flex: 1;
+        }
+        
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .radio-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-top: 0.2rem;
+        }
+        
+        .radio-option-content {
+            flex: 1;
+        }
+        
+        .radio-option-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .radio-option-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .summary-label {
+            color: var(--text-light);
+        }
+        
+        .summary-value {
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .total-cost {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .sku-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .sku-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .sku-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .sku-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .sku-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .review-section {
+            margin-bottom: 2rem;
+        }
+        
+        .review-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .review-section h3 i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .review-details {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .review-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-label {
+            width: 150px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .review-value {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .deploy-status {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .deploy-status i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .deploy-status h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .deploy-status p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 0.5s;
+        }
+        
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-toggle:hover {
+            border-color: var(--primary);
+        }
+        
+        .feature-toggle.active {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .feature-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .feature-name {
+            font-weight: 500;
+        }
+        
+        .feature-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .feature-price {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li >
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li class="active">
+                <a href="./postlogindatabase3.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li >
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Database</a>
+                <span class="separator">/</span>
+                <span>Create Instance</span>
+            </div>
+            <h1 class="page-title">Create Database Instance</h1>
+            <button class="btn btn-outline">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+        
+        <div class="creation-steps">
+            <div class="step active" id="step1">1. Configure</div>
+            <div class="step inactive" id="step2">2. Review</div>
+            <div class="step inactive" id="step3">3. Deploy</div>
+        </div>
+        
+        <!-- Configure Step -->
+        <div class="form-container" id="configureStep">
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-cog"></i> Basic Configuration
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="db-name">Database Name</label>
+                        <input type="text" id="db-name" placeholder="e.g., production-db">
+                        <p class="form-hint">This name will be used to identify your database instance</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="region">Region</label>
+                        <select id="region">
+                            <option value="">Select Region</option>
+                            <option value="us-east-1">US East (N. Virginia)</option>
+                            <option value="us-west-1">US West (N. California)</option>
+                            <option value="eu-central-1">Europe (Frankfurt)</option>
+                            <option value="ap-south-1">Asia Pacific (Mumbai)</option>
+                        </select>
+                        <p class="form-hint">Choose a region closest to your users for better performance</p>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="engine">Database Engine</label>
+                        <select id="engine">
+                            <option value="">Select Engine</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="postgresql">PostgreSQL</option>
+                            <option value="mssql">Microsoft SQL Server</option>
+                            <option value="oracle">Oracle Database</option>
+                            <option value="mongodb">MongoDB</option>
+                            <option value="redis">Redis</option>
+                            <option value="cassandra">Cassandra</option>
+                            <option value="oracle-nosql">Oracle NoSQL</option>
+                            <option value="elasticsearch">Elasticsearch</option>
+                            <option value="opensearch">OpenSearch</option>
+                            <option value="hadoop">Hadoop</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="version">Version</label>
+                        <select id="version" disabled>
+                            <option value="">Select Version</option>
+                            <!-- Versions will be populated based on engine selection -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Edition</label>
+                        <div class="radio-group" id="editionGroup">
+                            <div class="radio-option">
+                                <div class="radio-option-content">Select a database engine first</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>High Availability</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="ha" value="disabled" checked>
+                                <div class="radio-option-content">
+                                    <div class="radio-option-title">Disabled</div>
+                                    <div class="radio-option-description">Single node deployment</div>
+                                </div>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="ha" value="enabled">
+                                <div class="radio-option-content">
+                                    <div class="radio-option-title">Enabled</div>
+                                    <div class="radio-option-description">Multi-node deployment with automatic failover</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-server"></i> Instance Specifications
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="plan">Plan</label>
+                        <select id="plan">
+                            <option value="">Select Plan</option>
+                            <option value="basic">Basic</option>
+                            <option value="general">General Purpose</option>
+                            <option value="memory">Memory Optimized</option>
+                            <option value="cpu">CPU Optimized</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="node-size">Node Size</label>
+                        <select id="node-size" disabled>
+                            <option value="">Select Plan First</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nodes">Number of Nodes</label>
+                        <select id="nodes">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <p class="form-hint">For high availability, select at least 3 nodes</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="os">Operating System</label>
+                        <select id="os">
+                            <option value="">Select OS</option>
+                            <option value="ubuntu-20.04">Ubuntu 20.04 LTS ($0.02/vCPU/hour)</option>
+                            <option value="ubuntu-22.04">Ubuntu 22.04 LTS ($0.03/vCPU/hour)</option>
+                            <option value="rhel-8">RHEL 8 ($0.05/vCPU/hour)</option>
+                            <option value="rhel-9">RHEL 9 ($0.06/vCPU/hour)</option>
+                            <option value="sles-15">SLES 15 ($0.04/vCPU/hour)</option>
+                            <option value="centos-7">CentOS 7 ($0.01/vCPU/hour)</option>
+                            <option value="windows-2019">Windows Server 2019 ($0.10/vCPU/hour)</option>
+                            <option value="windows-2022">Windows Server 2022 ($0.12/vCPU/hour)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>SKUs Available</label>
+                        <div class="sku-table-container">
+                            <table class="sku-table">
+                                <thead>
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>vCPUs</th>
+                                        <th>Memory</th>
+                                        <th>Price/Hour</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="skuTableBody">
+                                    <!-- SKUs will be populated based on plan selection -->
+                                    <tr>
+                                        <td colspan="4">Select a plan to view available SKUs</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-hdd"></i> Storage Configuration
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="storage-type">Storage Type</label>
+                        <select id="storage-type">
+                            <option value="ssd">SSD ($0.10/GB/month)</option>
+                            <option value="hdd">HDD ($0.05/GB/month)</option>
+                            <option value="nvme">NVMe SSD ($0.15/GB/month)</option>
+                        </select>
+                        <p class="form-hint">SSD recommended for production workloads</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="storage-size">Storage Size (GB)</label>
+                        <input type="number" id="storage-size" min="10" max="10000" value="100">
+                        <p class="form-hint">Minimum 10GB, maximum 10TB</p>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="backup">Backup Policy</label>
+                        <select id="backup">
+                            <option value="daily">Daily ($0.02/GB/month)</option>
+                            <option value="weekly">Weekly ($0.01/GB/month)</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="backup-retention">Backup Retention (days)</label>
+                        <input type="number" id="backup-retention" min="1" max="365" value="7" disabled>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-shield-alt"></i> Security & Network
+                </h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="network">Network</label>
+                        <select id="network">
+                            <option value="default">Default Network ($0.05/hour)</option>
+                            <option value="vpc-1">Production VPC ($0.10/hour)</option>
+                            <option value="vpc-2">Development VPC ($0.07/hour)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="security-group">Security Group</label>
+                        <select id="security-group">
+                            <option value="default">Default Security Group ($0.02/hour)</option>
+                            <option value="web-servers">Web Servers ($0.05/hour)</option>
+                            <option value="db-servers">Database Servers ($0.08/hour)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="encryption">Encryption</label>
+                        <select id="encryption">
+                            <option value="enabled">Enabled (at rest and in transit) ($0.03/GB/month)</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-star"></i> Advanced Features
+                </h2>
+                <div class="feature-toggle" id="pitrToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Point-in-Time Recovery</div>
+                        <div class="feature-description">Recover your database to any point in time within your retention period</div>
+                    </div>
+                    <div class="feature-price">$0.05/GB/month</div>
+                    <input type="checkbox" id="pitr" style="display: none;">
+                </div>
+                
+                <div class="feature-toggle" id="replicaToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Read Replicas</div>
+                        <div class="feature-description">Scale read operations by creating read-only replicas of your database</div>
+                    </div>
+                    <div class="feature-price">$0.08/vCPU/hour per replica</div>
+                    <input type="checkbox" id="replica" style="display: none;">
+                </div>
+                
+                <div class="feature-toggle" id="shardingToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Sharding</div>
+                        <div class="feature-description">Distribute your data across multiple nodes for horizontal scaling</div>
+                    </div>
+                    <div class="feature-price">$0.12/vCPU/hour per shard</div>
+                    <input type="checkbox" id="sharding" style="display: none;">
+                </div>
+                
+                <div class="feature-toggle" id="monitoringToggle">
+                    <div class="feature-info">
+                        <div class="feature-name">Advanced Monitoring</div>
+                        <div class="feature-description">Enhanced metrics, alerts, and performance insights</div>
+                    </div>
+                    <div class="feature-price">$0.03/vCPU/hour</div>
+                    <input type="checkbox" id="monitoring" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2 class="section-header">
+                    <i class="fas fa-headset"></i> Support Tier
+                </h2>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="basic" checked>
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Basic Support</div>
+                            <div class="radio-option-description">24-48 hour response time, business hours</div>
+                            <div class="radio-option-description">Included in base price</div>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="standard">
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Standard Support</div>
+                            <div class="radio-option-description">12-24 hour response time, 24/7 coverage</div>
+                            <div class="radio-option-description">8% of total monthly cost</div>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="support" value="premium">
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">Premium Support</div>
+                            <div class="radio-option-description">1 hour response time, 24/7 with dedicated engineer</div>
+                            <div class="radio-option-description">15% of total monthly cost</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h2 class="summary-header">
+                    <i class="fas fa-receipt"></i> Cost Summary
+                </h2>
+                <div class="summary-row">
+                    <span class="summary-label">Instance Type:</span>
+                    <span class="summary-value" id="summary-instance">Not selected</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Database License:</span>
+                    <span class="summary-value" id="summary-license">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Nodes:</span>
+                    <span class="summary-value" id="summary-nodes">1</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Storage:</span>
+                    <span class="summary-value" id="summary-storage">100GB SSD</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Backup:</span>
+                    <span class="summary-value" id="summary-backup">Daily (7 day retention)</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Network & Security:</span>
+                    <span class="summary-value" id="summary-network">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Advanced Features:</span>
+                    <span class="summary-value" id="summary-features">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Support:</span>
+                    <span class="summary-value" id="summary-support">Basic ($0/month)</span>
+                </div>
+                <div class="total-cost">
+                    <span>Estimated Monthly Cost:</span>
+                    <span id="total-cost">$0.00</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-outline">
+                    <i class="fas fa-save"></i> Save as Draft
+                </button>
+                <button class="btn btn-primary" id="nextBtn">
+                    Next: Review <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Review Step (initially hidden) -->
+        <div class="form-container" id="reviewStep" style="display: none;">
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-check-circle"></i> Review Your Configuration
+                </h3>
+                <p>Please review your database configuration before deployment.</p>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-cog"></i> Basic Configuration
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Database Name:</div>
+                        <div class="review-value" id="review-db-name">production-db</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Region:</div>
+                        <div class="review-value" id="review-region">US East (N. Virginia)</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Database Engine:</div>
+                        <div class="review-value" id="review-engine">MySQL 8.0</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Edition:</div>
+                        <div class="review-value" id="review-edition">Community</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">High Availability:</div>
+                        <div class="review-value" id="review-ha">Disabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-server"></i> Instance Specifications
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Plan:</div>
+                        <div class="review-value" id="review-plan">General Purpose</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Node Size:</div>
+                        <div class="review-value" id="review-node-size">4 vCPU, 16GB RAM</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Nodes:</div>
+                        <div class="review-value" id="review-nodes">1</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Operating System:</div>
+                        <div class="review-value" id="review-os">Ubuntu 22.04 LTS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-hdd"></i> Storage Configuration
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Storage Type:</div>
+                        <div class="review-value" id="review-storage-type">SSD</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Storage Size:</div>
+                        <div class="review-value" id="review-storage-size">100 GB</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Backup Policy:</div>
+                        <div class="review-value" id="review-backup">Daily</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Backup Retention:</div>
+                        <div class="review-value" id="review-backup-retention">7 days</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-shield-alt"></i> Security & Network
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Network:</div>
+                        <div class="review-value" id="review-network">Default Network</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Security Group:</div>
+                        <div class="review-value" id="review-security-group">Default Security Group</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Encryption:</div>
+                        <div class="review-value" id="review-encryption">Enabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-star"></i> Advanced Features
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Point-in-Time Recovery:</div>
+                        <div class="review-value" id="review-pitr">Disabled</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Read Replicas:</div>
+                        <div class="review-value" id="review-replica">Disabled</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Sharding:</div>
+                        <div class="review-value" id="review-sharding">Disabled</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Advanced Monitoring:</div>
+                        <div class="review-value" id="review-monitoring">Disabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h3>
+                    <i class="fas fa-headset"></i> Support Tier
+                </h3>
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Support Level:</div>
+                        <div class="review-value" id="review-support">Basic Support</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <h2 class="summary-header">
+                    <i class="fas fa-receipt"></i> Final Cost Summary
+                </h2>
+                <div class="summary-row">
+                    <span class="summary-label">Instance Type:</span>
+                    <span class="summary-value" id="final-instance">General Purpose - 4 vCPU, 16GB RAM</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Database License:</span>
+                    <span class="summary-value" id="final-license">$300.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Nodes:</span>
+                    <span class="summary-value" id="final-nodes">1</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Storage:</span>
+                    <span class="summary-value" id="final-storage">100GB SSD</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Backup:</span>
+                    <span class="summary-value" id="final-backup">Daily (7 day retention)</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Network & Security:</span>
+                    <span class="summary-value" id="final-network">$50.40</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Advanced Features:</span>
+                    <span class="summary-value" id="final-features">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Support:</span>
+                    <span class="summary-value" id="final-support">Basic ($0/month)</span>
+                </div>
+                <div class="total-cost">
+                    <span>Total Monthly Cost:</span>
+                    <span id="final-total-cost">$350.40</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-primary" id="deployBtn">
+                    <i class="fas fa-rocket"></i> Deploy Database
+                </button>
+            </div>
+        </div>
+        
+        <!-- Deploy Step (initially hidden) -->
+        <div class="form-container" id="deployStep" style="display: none;">
+            <div class="deploy-status">
+                <i class="fas fa-cog fa-spin"></i>
+                <h2>Deploying Your Database</h2>
+                <p>Your database instance is being provisioned. This process typically takes 5-10 minutes. You can close this page and we'll notify you when your database is ready.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="deployProgress"></div>
+                </div>
+                
+                <div class="review-details">
+                    <div class="review-row">
+                        <div class="review-label">Database Name:</div>
+                        <div class="review-value" id="deploy-db-name">production-db</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Region:</div>
+                        <div class="review-value" id="deploy-region">US East (N. Virginia)</div>
+                    </div>
+                    <div class="review-row">
+                        <div class="review-label">Estimated Completion:</div>
+                        <div class="review-value">2 minutes</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons" style="justify-content: center;">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-external-link-alt"></i> View Deployment Logs
+                    </button>
+                    <button class="btn btn-primary" id="dashboardBtn">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       // Database versions by engine
+       const databaseVersions = {
+            mysql: [
+                { value: 'mysql-8.0', label: 'MySQL 8.0' },
+                { value: 'mysql-5.7', label: 'MySQL 5.7' }
+            ],
+            postgresql: [
+                { value: 'postgres-14', label: 'PostgreSQL 14' },
+                { value: 'postgres-13', label: 'PostgreSQL 13' },
+                { value: 'postgres-12', label: 'PostgreSQL 12' }
+            ],
+            mssql: [
+                { value: 'mssql-2019', label: 'SQL Server 2019' },
+                { value: 'mssql-2017', label: 'SQL Server 2017' }
+            ],
+            oracle: [
+                { value: 'oracle-19c', label: 'Oracle 19c' },
+                { value: 'oracle-12c', label: 'Oracle 12c' }
+            ],
+            mongodb: [
+                { value: 'mongodb-5.0', label: 'MongoDB 5.0' },
+                { value: 'mongodb-4.4', label: 'MongoDB 4.4' }
+            ],
+            redis: [
+                { value: 'redis-6', label: 'Redis 6' },
+                { value: 'redis-5', label: 'Redis 5' }
+            ],
+            cassandra: [
+                { value: 'cassandra-4', label: 'Cassandra 4' },
+                { value: 'cassandra-3', label: 'Cassandra 3' }
+            ],
+            'oracle-nosql': [
+                { value: 'oracle-nosql-20', label: 'Oracle NoSQL 20' }
+            ],
+            elasticsearch: [
+                { value: 'elasticsearch-7', label: 'Elasticsearch 7' },
+                { value: 'elasticsearch-6', label: 'Elasticsearch 6' }
+            ],
+            opensearch: [
+                { value: 'opensearch-1', label: 'OpenSearch 1' }
+            ],
+            hadoop: [
+                { value: 'hadoop-3', label: 'Hadoop 3' },
+                { value: 'hadoop-2', label: 'Hadoop 2' }
+            ]
+        };
+
+        // Database edition availability
+        const databaseEditions = {
+            mysql: ['community', 'enterprise'],
+            postgresql: ['community', 'enterprise'],
+            mssql: ['community', 'enterprise'],
+            oracle: ['community', 'enterprise'],
+            mongodb: ['community', 'enterprise'],
+            redis: ['community', 'enterprise'],
+            cassandra: ['community', 'enterprise'],
+            'oracle-nosql': ['community'],
+            elasticsearch: ['enterprise'],
+            opensearch: ['community'],
+            hadoop: ['community']
+        };
+
+        // Database license prices
+        const databasePrices = {
+            mysql: {
+                community: 300,
+                enterprise: 1950  // per license (up to 16 vCPU)
+            },
+            postgresql: {
+                community: 500,
+                enterprise: 1300  // per vCPU
+            },
+            mssql: {
+                community: 1000,  // per license (per 2 vCPU)
+                enterprise: 2800  // per license (per 2 vCPU)
+            },
+            oracle: {
+                community: 1500,  // per 2 vCPU
+                enterprise: 3000  // per 2 vCPU
+            },
+            'oracle-nosql': {
+                community: 2500,
+                enterprise: 0     // no enterprise version
+            },
+            mongodb: {
+                community: 500,
+                enterprise: 5100  // per node
+            },
+            redis: {
+                community: 1300,
+                enterprise: 3500  // per shard
+            },
+            cassandra: {
+                community: 3300,  // per node
+                enterprise: 6300  // per node
+            },
+            opensearch: {
+                community: 2500,  // per node
+                enterprise: 0     // no enterprise version
+            },
+            elasticsearch: {
+                community: 0,     // no community version
+                enterprise: 4200  // per node
+            },
+            hadoop: {
+                community: 1750,  // per node
+                enterprise: 0     // no enterprise version
+            }
+        };
+
+        // Node sizes by plan
+        const nodeSizesByPlan = {
+            basic: [
+                { value: '1v2g', label: '1 vCPU, 2GB RAM', vcpu: 1, memory: 2, price: 0.02 },
+                { value: '2v2g', label: '2 vCPU, 2GB RAM', vcpu: 2, memory: 2, price: 0.04 },
+                { value: '2v4g', label: '2 vCPU, 4GB RAM', vcpu: 2, memory: 4, price: 0.06 },
+                { value: '4v8g', label: '4 vCPU, 8GB RAM', vcpu: 4, memory: 8, price: 0.10 },
+                { value: '8v16g', label: '8 vCPU, 16GB RAM', vcpu: 8, memory: 16, price: 0.18 }
+            ],
+            general: [
+                { value: '2v8g', label: '2 vCPU, 8GB RAM', vcpu: 2, memory: 8, price: 0.08 },
+                { value: '4v16g', label: '4 vCPU, 16GB RAM', vcpu: 4, memory: 16, price: 0.16 },
+                { value: '8v32g', label: '8 vCPU, 32GB RAM', vcpu: 8, memory: 32, price: 0.32 },
+                { value: '16v64g', label: '16 vCPU, 64GB RAM', vcpu: 16, memory: 64, price: 0.64 },
+                { value: '32v128g', label: '32 vCPU, 128GB RAM', vcpu: 32, memory: 128, price: 1.28 },
+                { value: '48v192g', label: '48 vCPU, 192GB RAM', vcpu: 48, memory: 192, price: 1.92 },
+                { value: '64v256g', label: '64 vCPU, 256GB RAM', vcpu: 64, memory: 256, price: 2.56 },
+                { value: '96v384g', label: '96 vCPU, 384GB RAM', vcpu: 96, memory: 384, price: 3.84 },
+                { value: '128v512g', label: '128 vCPU, 512GB RAM', vcpu: 128, memory: 512, price: 5.12 }
+            ],
+            memory: [
+                { value: '2v16g', label: '2 vCPU, 16GB RAM', vcpu: 2, memory: 16, price: 0.12 },
+                { value: '4v32g', label: '4 vCPU, 32GB RAM', vcpu: 4, memory: 32, price: 0.24 },
+                { value: '8v64g', label: '8 vCPU, 64GB RAM', vcpu: 8, memory: 64, price: 0.48 },
+                { value: '16v128g', label: '16 vCPU, 128GB RAM', vcpu: 16, memory: 128, price: 0.96 },
+                { value: '32v256g', label: '32 vCPU, 256GB RAM', vcpu: 32, memory: 256, price: 1.92 },
+                { value: '48v384g', label: '48 vCPU, 384GB RAM', vcpu: 48, memory: 384, price: 2.88 },
+                { value: '64v512g', label: '64 vCPU, 512GB RAM', vcpu: 64, memory: 512, price: 3.84 },
+                { value: '96v768g', label: '96 vCPU, 768GB RAM', vcpu: 96, memory: 768, price: 5.76 },
+                { value: '128v1024g', label: '128 vCPU, 1024GB RAM', vcpu: 128, memory: 1024, price: 7.68 }
+            ],
+            cpu: [
+                { value: '4v8g', label: '4 vCPU, 8GB RAM', vcpu: 4, memory: 8, price: 0.15 },
+                { value: '8v16g', label: '8 vCPU, 16GB RAM', vcpu: 8, memory: 16, price: 0.30 },
+                { value: '12v24g', label: '12 vCPU, 24GB RAM', vcpu: 12, memory: 24, price: 0.45 },
+                { value: '16v32g', label: '16 vCPU, 32GB RAM', vcpu: 16, memory: 32, price: 0.60 },
+                { value: '16v64g', label: '16 vCPU, 64GB RAM', vcpu: 16, memory: 64, price: 0.90 },
+                { value: '32v64g', label: '32 vCPU, 64GB RAM', vcpu: 32, memory: 64, price: 1.20 },
+                { value: '32v128g', label: '32 vCPU, 128GB RAM', vcpu: 32, memory: 128, price: 1.80 },
+                { value: '64v128g', label: '64 vCPU, 128GB RAM', vcpu: 64, memory: 128, price: 2.40 },
+                { value: '64v256g', label: '64 vCPU, 256GB RAM', vcpu: 64, memory: 256, price: 3.60 }
+            ]
+        };
+
+        // OS prices (per vCPU per hour)
+        const osPrices = {
+            'ubuntu-20.04': 0.02,
+            'ubuntu-22.04': 0.03,
+            'rhel-8': 0.05,
+            'rhel-9': 0.06,
+            'sles-15': 0.04,
+            'centos-7': 0.01,
+            'windows-2019': 0.10,
+            'windows-2022': 0.12
+        };
+
+        // Network prices (per hour)
+        const networkPrices = {
+            'default': 0.05,
+            'vpc-1': 0.10,
+            'vpc-2': 0.07
+        };
+
+        // Security group prices (per hour)
+        const securityPrices = {
+            'default': 0.02,
+            'web-servers': 0.05,
+            'db-servers': 0.08
+        };
+
+        // Storage prices (per GB per month)
+        const storagePrices = {
+            'ssd': 0.10,
+            'hdd': 0.05,
+            'nvme': 0.15
+        };
+
+        // Backup prices (per GB per month)
+        const backupPrices = {
+            'daily': 0.02,
+            'weekly': 0.01,
+            'none': 0
+        };
+
+        // Encryption price (per GB per month)
+        const encryptionPrice = 0.03;
+
+        // Advanced features prices
+        const featurePrices = {
+            'pitr': 0.05,       // per GB per month
+            'replica': 0.08,     // per vCPU per hour per replica
+            'sharding': 0.12,    // per vCPU per hour per shard
+            'monitoring': 0.03   // per vCPU per hour
+        };
+
+        // DOM elements
+        const engineSelect = document.getElementById('engine');
+        const versionSelect = document.getElementById('version');
+        const planSelect = document.getElementById('plan');
+        const nodeSizeSelect = document.getElementById('node-size');
+        const skuTableBody = document.getElementById('skuTableBody');
+        const backupSelect = document.getElementById('backup');
+        const backupRetentionInput = document.getElementById('backup-retention');
+        const configureStep = document.getElementById('configureStep');
+        const reviewStep = document.getElementById('reviewStep');
+        const deployStep = document.getElementById('deployStep');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const deployBtn = document.getElementById('deployBtn');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const pitrToggle = document.getElementById('pitrToggle');
+        const replicaToggle = document.getElementById('replicaToggle');
+        const shardingToggle = document.getElementById('shardingToggle');
+        const monitoringToggle = document.getElementById('monitoringToggle');
+        const pitrCheckbox = document.getElementById('pitr');
+        const replicaCheckbox = document.getElementById('replica');
+        const shardingCheckbox = document.getElementById('sharding');
+        const monitoringCheckbox = document.getElementById('monitoring');
+
+        // Update database versions and editions based on selected engine
+        function updateDatabaseVersions() {
+            const selectedEngine = engineSelect.value;
+            versionSelect.innerHTML = '<option value="">Select Version</option>';
+            const editionGroup = document.getElementById('editionGroup');
+            editionGroup.innerHTML = '';
+            
+            if (selectedEngine && databaseVersions[selectedEngine]) {
+                versionSelect.disabled = false;
+                databaseVersions[selectedEngine].forEach(version => {
+                    const option = document.createElement('option');
+                    option.value = version.value;
+                    option.textContent = version.label;
+                    versionSelect.appendChild(option);
+                });
+                
+                // Get available editions for this engine
+                const availableEditions = databaseEditions[selectedEngine] || [];
+                
+                // Create radio options for available editions
+                availableEditions.forEach(edition => {
+                    const optionId = `edition-${edition}`;
+                    const option = document.createElement('label');
+                    option.className = 'radio-option';
+                    option.htmlFor = optionId;
+                    option.innerHTML = `
+                        <input type="radio" id="${optionId}" name="edition" value="${edition}" ${availableEditions.length === 1 ? 'checked' : ''}>
+                        <div class="radio-option-content">
+                            <div class="radio-option-title">${edition.charAt(0).toUpperCase() + edition.slice(1)}</div>
+                            <div class="radio-option-description">
+                                ${edition === 'community' ? 'Open-source version with basic features' : 'Advanced features and commercial license'}
+                            </div>
+                        </div>
+                    `;
+                    editionGroup.appendChild(option);
+                    
+                    // Add change handler to update cost when edition changes
+                    option.querySelector('input').addEventListener('change', updateCostSummary);
+                });
+                
+                // If only one edition available, disable the radio group
+                if (availableEditions.length === 1) {
+                    editionGroup.querySelectorAll('input').forEach(radio => {
+                        radio.disabled = true;
+                    });
+                    editionGroup.style.opacity = '0.7';
+                } else {
+                    editionGroup.querySelectorAll('input').forEach(radio => {
+                        radio.disabled = false;
+                    });
+                    editionGroup.style.opacity = '1';
+                }
+            } else {
+                versionSelect.disabled = true;
+                editionGroup.innerHTML = '<div class="radio-option"><div class="radio-option-content">Select a database engine first</div></div>';
+            }
+            
+            updateCostSummary();
+        }
+
+        // Update node sizes and SKUs based on selected plan
+        function updateNodeSizesAndSKUs() {
+            const selectedPlan = planSelect.value;
+            nodeSizeSelect.innerHTML = '<option value="">Select Node Size</option>';
+            skuTableBody.innerHTML = '';
+            
+            if (selectedPlan && nodeSizesByPlan[selectedPlan]) {
+                nodeSizeSelect.disabled = false;
+                nodeSizesByPlan[selectedPlan].forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size.value;
+                    option.textContent = size.label;
+                    nodeSizeSelect.appendChild(option);
+                });
+                
+                // Populate SKU table
+                if (nodeSizesByPlan[selectedPlan]) {
+                    nodeSizesByPlan[selectedPlan].forEach(sku => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${sku.label}</td>
+                            <td>${sku.vcpu}</td>
+                            <td>${sku.memory}GB</td>
+                            <td>$${sku.price.toFixed(2)}/hour</td>
+                        `;
+                        skuTableBody.appendChild(row);
+                    });
+                }
+            } else {
+                nodeSizeSelect.disabled = true;
+                skuTableBody.innerHTML = '<tr><td colspan="4">Select a plan to view available SKUs</td></tr>';
+            }
+            
+            updateCostSummary();
+        }
+
+        // Toggle backup retention input based on backup policy
+        function toggleBackupRetention() {
+            backupRetentionInput.disabled = backupSelect.value === 'none';
+            updateCostSummary();
+        }
+
+        // Calculate database license cost
+        function calculateLicenseCost() {
+            const engine = engineSelect.value;
+            const edition = document.querySelector('input[name="edition"]:checked').value;
+            const nodeSize = nodeSizeSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            
+            if (!engine || !nodeSize) return 0;
+            
+            const basePrice = databasePrices[engine][edition];
+            if (basePrice === 0) return 0;
+            
+            // Find the selected node size
+            const plan = planSelect.value;
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            // Calculate license cost based on database type
+            switch (engine) {
+                case 'mysql':
+                    // $1950 per license (up to 16 vCPU)
+                    if (edition === 'enterprise') {
+                        const licenses = Math.ceil(selectedSize.vcpu / 16) * nodes;
+                        return licenses * basePrice;
+                    }
+                    // $300 flat for community
+                    return basePrice * nodes;
+                
+                case 'postgresql':
+                    // $1300 per vCPU for enterprise
+                    if (edition === 'enterprise') {
+                        return selectedSize.vcpu * basePrice * nodes;
+                    }
+                    // $500 flat for community
+                    return basePrice * nodes;
+                
+                case 'mssql':
+                case 'oracle':
+                    // Per 2 vCPU
+                    const licenses = Math.ceil(selectedSize.vcpu / 2) * nodes;
+                    return licenses * basePrice;
+                
+                case 'mongodb':
+                case 'cassandra':
+                case 'opensearch':
+                case 'elasticsearch':
+                case 'hadoop':
+                    // Per node
+                    return basePrice * nodes;
+                
+                case 'redis':
+                    // Per shard (node)
+                    return basePrice * nodes;
+                
+                case 'oracle-nosql':
+                    // Flat rate
+                    return basePrice;
+                
+                default:
+                    return 0;
+            }
+        }
+
+        // Calculate OS cost
+        function calculateOsCost() {
+            const os = document.getElementById('os').value;
+            if (!os) return 0;
+            
+            const osPrice = osPrices[os.split(' ')[0]] || 0;
+            const nodeSize = nodeSizeSelect.value;
+            const plan = planSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            
+            if (!nodeSize || !plan) return 0;
+            
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            // OS cost per vCPU per hour * vCPUs * nodes * hours in month (730)
+            return osPrice * selectedSize.vcpu * nodes * 730;
+        }
+
+        // Calculate network and security cost
+        function calculateNetworkCost() {
+            const network = document.getElementById('network').value;
+            const securityGroup = document.getElementById('security-group').value;
+            const encryption = document.getElementById('encryption').value;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 0;
+            
+            const networkPrice = networkPrices[network] || 0;
+            const securityPrice = securityPrices[securityGroup] || 0;
+            const encryptionCost = encryption === 'enabled' ? encryptionPrice * storageSize : 0;
+            
+            // Network and security prices are per hour * hours in month (730)
+            return (networkPrice + securityPrice) * 730 + encryptionCost;
+        }
+
+        // Calculate advanced features cost
+        function calculateFeaturesCost() {
+            const nodeSize = nodeSizeSelect.value;
+            const plan = planSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 0;
+            
+            if (!nodeSize || !plan) return 0;
+            
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            let total = 0;
+            
+            // Point-in-time recovery
+            if (pitrCheckbox.checked) {
+                total += featurePrices.pitr * storageSize;
+            }
+            
+            // Read replicas (assuming 1 replica for calculation)
+            if (replicaCheckbox.checked) {
+                total += featurePrices.replica * selectedSize.vcpu * 730; // per vCPU per hour
+            }
+            
+            // Sharding (assuming 2 shards for calculation)
+            if (shardingCheckbox.checked) {
+                total += featurePrices.sharding * selectedSize.vcpu * 2 * 730; // per vCPU per hour per shard
+            }
+            
+            // Advanced monitoring
+            if (monitoringCheckbox.checked) {
+                total += featurePrices.monitoring * selectedSize.vcpu * nodes * 730; // per vCPU per hour
+            }
+            
+            return total;
+        }
+
+        // Update cost summary based on selections
+        function updateCostSummary() {
+            // Get selected values
+            const plan = planSelect.value;
+            const nodeSize = nodeSizeSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 100;
+            const storageType = document.getElementById('storage-type').value.split(' ')[0];
+            const backup = document.getElementById('backup').value.split(' ')[0];
+            const support = document.querySelector('input[name="support"]:checked').value;
+            
+            // Calculate costs
+            const licenseCost = calculateLicenseCost();
+            const osCost = calculateOsCost();
+            const instanceCost = (nodeSize && plan) ? 
+                (nodeSizesByPlan[plan].find(size => size.value === nodeSize)?.price || 0) * 730 * nodes : 0;
+            const storageCost = storagePrices[storageType] * storageSize;
+            const backupCost = backupPrices[backup] * storageSize;
+            const networkCost = calculateNetworkCost();
+            const featuresCost = calculateFeaturesCost();
+            
+            // Calculate subtotal before support
+            const subtotal = licenseCost + osCost + instanceCost + storageCost + backupCost + networkCost + featuresCost;
+            
+            // Calculate support cost
+            let supportCost = 0;
+            let supportText = 'Basic ($0/month)';
+            
+            if (support === 'standard') {
+                supportCost = subtotal * 0.08;
+                supportText = `Standard ($${supportCost.toFixed(2)}/month)`;
+            } else if (support === 'premium') {
+                supportCost = subtotal * 0.15;
+                supportText = `Premium ($${supportCost.toFixed(2)}/month)`;
+            }
+            
+            // Total cost
+            const totalCost = subtotal + supportCost;
+            
+            // Update summary
+            document.getElementById('summary-instance').textContent = 
+                plan && nodeSize ? `${planSelect.options[planSelect.selectedIndex].text} - ${nodeSizeSelect.options[nodeSizeSelect.selectedIndex].text}` : 'Not selected';
+            
+            document.getElementById('summary-license').textContent = `$${licenseCost.toFixed(2)}`;
+            document.getElementById('summary-nodes').textContent = nodes;
+            document.getElementById('summary-storage').textContent = `${storageSize}GB ${storageType.toUpperCase()}`;
+            document.getElementById('summary-backup').textContent = 
+                backup === 'none' ? 'Disabled' : `${backupSelect.options[backupSelect.selectedIndex].text.split(' ')[0]} (${backupRetentionInput.value} day retention)`;
+            
+            document.getElementById('summary-network').textContent = `$${networkCost.toFixed(2)}`;
+            document.getElementById('summary-features').textContent = `$${featuresCost.toFixed(2)}`;
+            document.getElementById('summary-support').textContent = supportText;
+            
+            document.getElementById('total-cost').textContent = `$${totalCost.toFixed(2)}`;
+        }
+
+        // Show review step
+        function showReviewStep() {
+            // Update review fields with current selections
+            document.getElementById('review-db-name').textContent = document.getElementById('db-name').value || 'Not specified';
+            document.getElementById('review-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            document.getElementById('review-engine').textContent = 
+                `${document.getElementById('engine').options[document.getElementById('engine').selectedIndex].text} ${document.getElementById('version').options[document.getElementById('version').selectedIndex].text}`;
+            document.getElementById('review-edition').textContent = 
+                document.querySelector('input[name="edition"]:checked').value === 'community' ? 'Community' : 'Enterprise';
+            document.getElementById('review-ha').textContent = 
+                document.querySelector('input[name="ha"]:checked').value === 'enabled' ? 'Enabled' : 'Disabled';
+            document.getElementById('review-plan').textContent = document.getElementById('plan').options[document.getElementById('plan').selectedIndex].text;
+            document.getElementById('review-node-size').textContent = document.getElementById('node-size').options[document.getElementById('node-size').selectedIndex].text;
+            document.getElementById('review-nodes').textContent = document.getElementById('nodes').value;
+            document.getElementById('review-os').textContent = document.getElementById('os').options[document.getElementById('os').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-storage-type').textContent = document.getElementById('storage-type').options[document.getElementById('storage-type').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-storage-size').textContent = `${document.getElementById('storage-size').value} GB`;
+            document.getElementById('review-backup').textContent = document.getElementById('backup').options[document.getElementById('backup').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-backup-retention').textContent = `${document.getElementById('backup-retention').value} days`;
+            document.getElementById('review-network').textContent = document.getElementById('network').options[document.getElementById('network').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-security-group').textContent = document.getElementById('security-group').options[document.getElementById('security-group').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-encryption').textContent = document.getElementById('encryption').options[document.getElementById('encryption').selectedIndex].text.split(' ')[0];
+            
+            // Update advanced features review
+            document.getElementById('review-pitr').textContent = pitrCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-replica').textContent = replicaCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-sharding').textContent = shardingCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-monitoring').textContent = monitoringCheckbox.checked ? 'Enabled' : 'Disabled';
+            
+            // Support level
+            let supportText = 'Basic Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'standard') supportText = 'Standard Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'premium') supportText = 'Premium Support';
+            document.getElementById('review-support').textContent = supportText;
+            
+            // Update final cost summary
+            document.getElementById('final-instance').textContent = document.getElementById('summary-instance').textContent;
+            document.getElementById('final-license').textContent = document.getElementById('summary-license').textContent;
+            document.getElementById('final-nodes').textContent = document.getElementById('summary-nodes').textContent;
+            document.getElementById('final-storage').textContent = document.getElementById('summary-storage').textContent;
+            document.getElementById('final-backup').textContent = document.getElementById('summary-backup').textContent;
+            document.getElementById('final-network').textContent = document.getElementById('summary-network').textContent;
+            document.getElementById('final-features').textContent = document.getElementById('summary-features').textContent;
+            document.getElementById('final-support').textContent = document.getElementById('summary-support').textContent;
+            document.getElementById('final-total-cost').textContent = document.getElementById('total-cost').textContent;
+            
+            // Update deployment step with DB name and region
+            document.getElementById('deploy-db-name').textContent = document.getElementById('db-name').value || 'production-db';
+            document.getElementById('deploy-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            
+            // Show review step and update progress
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'block';
+            deployStep.style.display = 'none';
+            
+            step1.classList.remove('active');
+            step1.classList.add('completed');
+            step2.classList.remove('inactive');
+            step2.classList.add('active');
+        }
+
+        // Show configure step
+        function showConfigureStep() {
+            configureStep.style.display = 'block';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'none';
+            
+            step1.classList.add('active');
+            step1.classList.remove('completed');
+            step2.classList.remove('active');
+            step2.classList.add('inactive');
+        }
+
+        // Show deploy step
+        function showDeployStep() {
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'block';
+            
+            step1.classList.add('completed');
+            step2.classList.add('completed');
+            step3.classList.remove('inactive');
+            step3.classList.add('active');
+            
+            // Simulate deployment progress
+            const progressBar = document.getElementById('deployProgress');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // In a real app, you would check actual deployment status
+                }
+            }, 500);
+        }
+
+        // Go to dashboard
+        function goToDashboard() {
+            alert('Redirecting to dashboard. In a real application, this would navigate to the dashboard page.');
+            // window.location.href = '/dashboard';
+        }
+
+        // Update cost summary when any relevant field changes
+        document.querySelectorAll('#engine, #version, input[name="edition"], input[name="ha"], #plan, #node-size, #nodes, #os, #storage-size, #storage-type, #backup, #backup-retention, #network, #security-group, #encryption, input[name="support"]').forEach(element => {
+            element.addEventListener('change', updateCostSummary);
+        });
+
+                // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            engineSelect.addEventListener('change', updateDatabaseVersions);
+            planSelect.addEventListener('change', updateNodeSizesAndSKUs);
+            backupSelect.addEventListener('change', toggleBackupRetention);
+            nextBtn.addEventListener('click', showReviewStep);
+            backBtn.addEventListener('click', showConfigureStep);
+            deployBtn.addEventListener('click', showDeployStep);
+            dashboardBtn.addEventListener('click', goToDashboard);
+            
+            // Feature toggle event listeners
+            pitrToggle.addEventListener('click', () => toggleFeature(pitrToggle, pitrCheckbox));
+            replicaToggle.addEventListener('click', () => toggleFeature(replicaToggle, replicaCheckbox));
+            shardingToggle.addEventListener('click', () => toggleFeature(shardingToggle, shardingCheckbox));
+            monitoringToggle.addEventListener('click', () => toggleFeature(monitoringToggle, monitoringCheckbox));
+            
+            // Initial setup
+            updateDatabaseVersions();
+            updateNodeSizesAndSKUs();
+            toggleBackupRetention();
+            updateCostSummary();
+        });
+
+        // Toggle feature selection
+        function toggleFeature(toggleElement, checkbox) {
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                toggleElement.classList.add('active');
+            } else {
+                toggleElement.classList.remove('active');
+            }
+            updateCostSummary();
+        }
+
+        // Update node sizes and SKUs based on selected plan
+        function updateNodeSizesAndSKUs() {
+            const selectedPlan = planSelect.value;
+            nodeSizeSelect.innerHTML = '<option value="">Select Node Size</option>';
+            skuTableBody.innerHTML = '';
+            
+            if (selectedPlan && nodeSizesByPlan[selectedPlan]) {
+                nodeSizeSelect.disabled = false;
+                nodeSizesByPlan[selectedPlan].forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size.value;
+                    option.textContent = size.label;
+                    nodeSizeSelect.appendChild(option);
+                });
+                
+                // Populate SKU table
+                if (nodeSizesByPlan[selectedPlan]) {
+                    nodeSizesByPlan[selectedPlan].forEach(sku => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${sku.label}</td>
+                            <td>${sku.vcpu}</td>
+                            <td>${sku.memory}GB</td>
+                            <td>$${sku.price.toFixed(2)}/hour</td>
+                        `;
+                        skuTableBody.appendChild(row);
+                    });
+                }
+            } else {
+                nodeSizeSelect.disabled = true;
+                skuTableBody.innerHTML = '<tr><td colspan="4">Select a plan to view available SKUs</td></tr>';
+            }
+            
+            updateCostSummary();
+        }
+
+        // Toggle backup retention input based on backup policy
+        function toggleBackupRetention() {
+            backupRetentionInput.disabled = backupSelect.value === 'none';
+            updateCostSummary();
+        }
+
+        // Calculate database license cost
+        function calculateLicenseCost() {
+            const engine = engineSelect.value;
+            const edition = document.querySelector('input[name="edition"]:checked')?.value || 'community';
+            const nodeSize = nodeSizeSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            
+            if (!engine || !nodeSize) return 0;
+            
+            const basePrice = databasePrices[engine][edition];
+            if (basePrice === 0) return 0;
+            
+            // Find the selected node size
+            const plan = planSelect.value;
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            // Calculate license cost based on database type
+            switch (engine) {
+                case 'mysql':
+                    // $1950 per license (up to 16 vCPU)
+                    if (edition === 'enterprise') {
+                        const licenses = Math.ceil(selectedSize.vcpu / 16) * nodes;
+                        return licenses * basePrice;
+                    }
+                    // $300 flat for community
+                    return basePrice * nodes;
+                
+                case 'postgresql':
+                    // $1300 per vCPU for enterprise
+                    if (edition === 'enterprise') {
+                        return selectedSize.vcpu * basePrice * nodes;
+                    }
+                    // $500 flat for community
+                    return basePrice * nodes;
+                
+                case 'mssql':
+                case 'oracle':
+                    // Per 2 vCPU
+                    const licenses = Math.ceil(selectedSize.vcpu / 2) * nodes;
+                    return licenses * basePrice;
+                
+                case 'mongodb':
+                case 'cassandra':
+                case 'opensearch':
+                case 'elasticsearch':
+                case 'hadoop':
+                    // Per node
+                    return basePrice * nodes;
+                
+                case 'redis':
+                    // Per shard (node)
+                    return basePrice * nodes;
+                
+                case 'oracle-nosql':
+                    // Flat rate
+                    return basePrice;
+                
+                default:
+                    return 0;
+            }
+        }
+
+        // Calculate OS cost
+        function calculateOsCost() {
+            const os = document.getElementById('os').value;
+            if (!os) return 0;
+            
+            const osPrice = osPrices[os.split(' ')[0]] || 0;
+            const nodeSize = nodeSizeSelect.value;
+            const plan = planSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            
+            if (!nodeSize || !plan) return 0;
+            
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            // OS cost per vCPU per hour * vCPUs * nodes * hours in month (730)
+            return osPrice * selectedSize.vcpu * nodes * 730;
+        }
+
+        // Calculate network and security cost
+        function calculateNetworkCost() {
+            const network = document.getElementById('network').value;
+            const securityGroup = document.getElementById('security-group').value;
+            const encryption = document.getElementById('encryption').value;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 0;
+            
+            const networkPrice = networkPrices[network] || 0;
+            const securityPrice = securityPrices[securityGroup] || 0;
+            const encryptionCost = encryption === 'enabled' ? encryptionPrice * storageSize : 0;
+            
+            // Network and security prices are per hour * hours in month (730)
+            return (networkPrice + securityPrice) * 730 + encryptionCost;
+        }
+
+        // Calculate advanced features cost
+        function calculateFeaturesCost() {
+            const nodeSize = nodeSizeSelect.value;
+            const plan = planSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 0;
+            
+            if (!nodeSize || !plan) return 0;
+            
+            const selectedSize = nodeSizesByPlan[plan].find(size => size.value === nodeSize);
+            if (!selectedSize) return 0;
+            
+            let total = 0;
+            
+            // Point-in-time recovery
+            if (pitrCheckbox.checked) {
+                total += featurePrices.pitr * storageSize;
+            }
+            
+            // Read replicas (assuming 1 replica for calculation)
+            if (replicaCheckbox.checked) {
+                total += featurePrices.replica * selectedSize.vcpu * 730; // per vCPU per hour
+            }
+            
+            // Sharding (assuming 2 shards for calculation)
+            if (shardingCheckbox.checked) {
+                total += featurePrices.sharding * selectedSize.vcpu * 2 * 730; // per vCPU per hour per shard
+            }
+            
+            // Advanced monitoring
+            if (monitoringCheckbox.checked) {
+                total += featurePrices.monitoring * selectedSize.vcpu * nodes * 730; // per vCPU per hour
+            }
+            
+            return total;
+        }
+
+        // Update cost summary based on selections
+        function updateCostSummary() {
+            // Get selected values
+            const plan = planSelect.value;
+            const nodeSize = nodeSizeSelect.value;
+            const nodes = parseInt(document.getElementById('nodes').value) || 1;
+            const storageSize = parseInt(document.getElementById('storage-size').value) || 100;
+            const storageType = document.getElementById('storage-type').value.split(' ')[0];
+            const backup = document.getElementById('backup').value.split(' ')[0];
+            const support = document.querySelector('input[name="support"]:checked')?.value || 'basic';
+            
+            // Calculate costs
+            const licenseCost = calculateLicenseCost();
+            const osCost = calculateOsCost();
+            const instanceCost = (nodeSize && plan) ? 
+                (nodeSizesByPlan[plan].find(size => size.value === nodeSize)?.price || 0) * 730 * nodes : 0;
+            const storageCost = storagePrices[storageType] * storageSize;
+            const backupCost = backupPrices[backup] * storageSize;
+            const networkCost = calculateNetworkCost();
+            const featuresCost = calculateFeaturesCost();
+            
+            // Calculate subtotal before support
+            const subtotal = licenseCost + osCost + instanceCost + storageCost + backupCost + networkCost + featuresCost;
+            
+            // Calculate support cost
+            let supportCost = 0;
+            let supportText = 'Basic ($0/month)';
+            
+            if (support === 'standard') {
+                supportCost = subtotal * 0.08;
+                supportText = `Standard ($${supportCost.toFixed(2)}/month)`;
+            } else if (support === 'premium') {
+                supportCost = subtotal * 0.15;
+                supportText = `Premium ($${supportCost.toFixed(2)}/month)`;
+            }
+            
+            // Total cost
+            const totalCost = subtotal + supportCost;
+            
+            // Update summary
+            document.getElementById('summary-instance').textContent = 
+                plan && nodeSize ? `${planSelect.options[planSelect.selectedIndex].text} - ${nodeSizeSelect.options[nodeSizeSelect.selectedIndex].text}` : 'Not selected';
+            
+            document.getElementById('summary-license').textContent = `$${licenseCost.toFixed(2)}`;
+            document.getElementById('summary-nodes').textContent = nodes;
+            document.getElementById('summary-storage').textContent = `${storageSize}GB ${storageType.toUpperCase()}`;
+            document.getElementById('summary-backup').textContent = 
+                backup === 'none' ? 'Disabled' : `${backupSelect.options[backupSelect.selectedIndex].text.split(' ')[0]} (${backupRetentionInput.value} day retention)`;
+            
+            document.getElementById('summary-network').textContent = `$${networkCost.toFixed(2)}`;
+            document.getElementById('summary-features').textContent = `$${featuresCost.toFixed(2)}`;
+            document.getElementById('summary-support').textContent = supportText;
+            
+            document.getElementById('total-cost').textContent = `$${totalCost.toFixed(2)}`;
+        }
+
+        // Show review step
+        function showReviewStep() {
+            // Update review fields with current selections
+            document.getElementById('review-db-name').textContent = document.getElementById('db-name').value || 'Not specified';
+            document.getElementById('review-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            document.getElementById('review-engine').textContent = 
+                `${document.getElementById('engine').options[document.getElementById('engine').selectedIndex].text} ${document.getElementById('version').options[document.getElementById('version').selectedIndex].text}`;
+            
+            // Get selected edition
+            const editionRadio = document.querySelector('input[name="edition"]:checked');
+            document.getElementById('review-edition').textContent = editionRadio ? 
+                (editionRadio.value === 'community' ? 'Community' : 'Enterprise') : 'Not selected';
+            
+            document.getElementById('review-ha').textContent = 
+                document.querySelector('input[name="ha"]:checked').value === 'enabled' ? 'Enabled' : 'Disabled';
+            document.getElementById('review-plan').textContent = document.getElementById('plan').options[document.getElementById('plan').selectedIndex].text;
+            document.getElementById('review-node-size').textContent = document.getElementById('node-size').options[document.getElementById('node-size').selectedIndex].text;
+            document.getElementById('review-nodes').textContent = document.getElementById('nodes').value;
+            document.getElementById('review-os').textContent = document.getElementById('os').options[document.getElementById('os').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-storage-type').textContent = document.getElementById('storage-type').options[document.getElementById('storage-type').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-storage-size').textContent = `${document.getElementById('storage-size').value} GB`;
+            document.getElementById('review-backup').textContent = document.getElementById('backup').options[document.getElementById('backup').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-backup-retention').textContent = `${document.getElementById('backup-retention').value} days`;
+            document.getElementById('review-network').textContent = document.getElementById('network').options[document.getElementById('network').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-security-group').textContent = document.getElementById('security-group').options[document.getElementById('security-group').selectedIndex].text.split(' ')[0];
+            document.getElementById('review-encryption').textContent = document.getElementById('encryption').options[document.getElementById('encryption').selectedIndex].text.split(' ')[0];
+            
+            // Update advanced features review
+            document.getElementById('review-pitr').textContent = pitrCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-replica').textContent = replicaCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-sharding').textContent = shardingCheckbox.checked ? 'Enabled' : 'Disabled';
+            document.getElementById('review-monitoring').textContent = monitoringCheckbox.checked ? 'Enabled' : 'Disabled';
+            
+            // Support level
+            let supportText = 'Basic Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'standard') supportText = 'Standard Support';
+            if (document.querySelector('input[name="support"]:checked').value === 'premium') supportText = 'Premium Support';
+            document.getElementById('review-support').textContent = supportText;
+            
+            // Update final cost summary
+            document.getElementById('final-instance').textContent = document.getElementById('summary-instance').textContent;
+            document.getElementById('final-license').textContent = document.getElementById('summary-license').textContent;
+            document.getElementById('final-nodes').textContent = document.getElementById('summary-nodes').textContent;
+            document.getElementById('final-storage').textContent = document.getElementById('summary-storage').textContent;
+            document.getElementById('final-backup').textContent = document.getElementById('summary-backup').textContent;
+            document.getElementById('final-network').textContent = document.getElementById('summary-network').textContent;
+            document.getElementById('final-features').textContent = document.getElementById('summary-features').textContent;
+            document.getElementById('final-support').textContent = document.getElementById('summary-support').textContent;
+            document.getElementById('final-total-cost').textContent = document.getElementById('total-cost').textContent;
+            
+            // Update deployment step with DB name and region
+            document.getElementById('deploy-db-name').textContent = document.getElementById('db-name').value || 'production-db';
+            document.getElementById('deploy-region').textContent = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+            
+            // Show review step and update progress
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'block';
+            deployStep.style.display = 'none';
+            
+            step1.classList.remove('active');
+            step1.classList.add('completed');
+            step2.classList.remove('inactive');
+            step2.classList.add('active');
+        }
+
+        // Show configure step
+        function showConfigureStep() {
+            configureStep.style.display = 'block';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'none';
+            
+            step1.classList.add('active');
+            step1.classList.remove('completed');
+            step2.classList.remove('active');
+            step2.classList.add('inactive');
+        }
+
+        // Show deploy step
+        function showDeployStep() {
+            configureStep.style.display = 'none';
+            reviewStep.style.display = 'none';
+            deployStep.style.display = 'block';
+            
+            step1.classList.add('completed');
+            step2.classList.add('completed');
+            step3.classList.remove('inactive');
+            step3.classList.add('active');
+            
+            // Simulate deployment progress
+            const progressBar = document.getElementById('deployProgress');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // In a real app, you would check actual deployment status
+                }
+            }, 500);
+        }
+
+        // Go to dashboard
+        function goToDashboard() {
+            alert('Redirecting to dashboard. In a real application, this would navigate to the dashboard page.');
+            // window.location.href = '/dashboard';
+        }
+
+        // Update cost summary when any relevant field changes
+        document.querySelectorAll('#engine, #version, #plan, #node-size, #nodes, #os, #storage-size, #storage-type, #backup, #backup-retention, #network, #security-group, #encryption, input[name="support"]').forEach(element => {
+            element.addEventListener('change', updateCostSummary);
+        });
+
+        // Also update cost when edition changes (handled in updateDatabaseVersions)
+        // and when feature toggles change (handled in toggleFeature)
+    </script>
+</body>
+</html>

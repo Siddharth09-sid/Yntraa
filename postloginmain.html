@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yntraa Cloud Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        
+
+             
+            
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), #6c8eff);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-banner h1 {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 1.75rem;
+        }
+        
+        .welcome-banner p {
+            margin-bottom: 0;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        
+        .service-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .service-card h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .service-card p {
+            color: var(--text-light);
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-title i {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        
+        .resource-section {
+            margin-top: 3rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .services-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="./yntraa final1.html">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </a>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="./postloginmain.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Storage</a>
+            </li>
+            <li>
+                <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"><i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="text-decoration: none; color: black;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li>
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"><i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li>
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+               <a href="./support.html" style="color: black;text-decoration: none;"> <i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="welcome-banner">
+            <h1>Welcome to Yntraa Cloud</h1>
+            <p>Deploy and manage your cloud resources with ease. Get started with our powerful services.</p>
+        </div>
+        
+        <div class="quick-actions">
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create New Instance
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-upload"></i> Upload Files
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-book"></i> Documentation
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-headset"></i> Contact Support
+            </button>
+        </div>
+        
+        <h2 class="section-title">
+            <i class="fas fa-cloud"></i> Cloud Services
+        </h2>
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be loaded dynamically -->
+        </div>
+        
+        <div class="resource-section">
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i> Resources
+            </h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Documentation</h3>
+                    <p>Comprehensive guides and API references for all Yntraa Cloud services</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Tutorials</h3>
+                    <p>Step-by-step tutorials for common tasks and use cases</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>API Explorer</h3>
+                    <p>Explore and test our API endpoints with interactive documentation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dynamic services data
+        const services = [
+            {
+                icon: 'fa-database',
+                title: 'Database',
+                description: 'Managed database services including MySQL, PostgreSQL, MongoDB and more',
+                category: 'database'
+                
+            },
+            {
+                icon: 'fa-server',
+                title: 'Compute',
+                description: 'Virtual machines, containers, and serverless computing options',
+                category: 'compute'
+            },
+            {
+                icon: 'fa-hdd',
+                title: 'Storage',
+                description: 'Block, object, and file storage solutions for all your needs',
+                category: 'storage'
+            },
+            {
+                icon: 'fa-network-wired',
+                title: 'Network',
+                description: 'Load balancers, DNS, CDN, and private networking',
+                category: 'network'
+            },
+            {
+                icon: 'fa-shield-alt',
+                title: 'Security',
+                description: 'Firewalls, IAM, encryption, and compliance tools',
+                category: 'security'
+            },
+            {
+                icon: 'fa-store',
+                title: 'Marketplace',
+                description: 'Pre-configured applications and development stacks',
+                category: 'marketplace'
+            }
+        ];
+
+        // Render services
+        const servicesGrid = document.getElementById('servicesGrid');
+        services.forEach(service => {
+            const card = document.createElement('div');
+            card.className = 'service-card';
+            card.innerHTML = `
+                <div class="service-icon">
+                    <i class="fas ${service.icon}"></i>
+                </div>
+                <h3>${service.title}</h3>
+                <p>${service.description}</p>
+            `;
+            card.addEventListener('click', () => {
+                navigateToService(service.category);
+            });
+            servicesGrid.appendChild(card);
+        });
+
+        // Navigation function
+        function navigateToService(service) {
+            // In a real app, this would route to the appropriate service page
+            console.log(`Navigating to ${service}`);
+            
+            // For this demo, we'll just show an alert
+            alert(`Navigating to ${service} service. In a real application, this would load the appropriate page.`);
+            
+            // Update active state in sidebar
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find the corresponding sidebar item and make it active
+            const sidebarItems = document.querySelectorAll('.sidebar-menu li');
+            for (let i = 0; i < sidebarItems.length; i++) {
+                if (sidebarItems[i].textContent.toLowerCase().includes(service)) {
+                    sidebarItems[i].classList.add('active');
+                    break;
+                }
+            }
+        }
+
+        // Handle sidebar navigation
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-menu li').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                const serviceName = this.textContent.trim().toLowerCase();
+                console.log(`Navigating to ${serviceName}`);
+                // In a real app, load the appropriate content for the selected service
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .search-bar button {
+            padding: 0.6rem 1.2rem;
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .category-tab {
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            background-color: var(--light);
+        }
+        
+        .category-tab.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .marketplace-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .marketplace-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-image {
+            height: 160px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .card-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .card-content {
+            padding: 1.25rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .card-badge {
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .card-vendor {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-description {
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .card-price {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+        }
+        
+        .card-rating i {
+            color: var(--warning);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .pagination button {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background-color: var(--light);
+            cursor: pointer;
+        }
+        
+        .pagination button.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .pagination button:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+        
+        .filter-sidebar {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-title {
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .filter-option input {
+            margin: 0;
+        }
+        
+        .marketplace-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .marketplace-main {
+            flex: 1;
+        }
+        
+        .marketplace-filters {
+            width: 250px;
+        }
+        
+        /* Add this new class for hidden elements */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+            .marketplace-filters {
+                width: 220px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .marketplace-container {
+                flex-direction: column;
+            }
+            .marketplace-filters {
+                width: 100%;
+            }
+            .category-tabs {
+                padding-bottom: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li class="active">
+                <a href="./marketplace.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Marketplace</a>
+                <span class="separator">/</span>
+                <span>All Solutions</span>
+            </div>
+            <h1 class="page-title">Marketplace</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for solutions...">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="all">All Solutions</div>
+            <div class="category-tab" data-category="monitoring">Monitoring</div>
+            <div class="category-tab" data-category="security">Security</div>
+            <div class="category-tab" data-category="storage">Storage</div>
+            <div class="category-tab" data-category="database">Databases</div>
+            <div class="category-tab" data-category="networking">Networking</div>
+            <div class="category-tab" data-category="devtools">Developer Tools</div>
+            <div class="category-tab" data-category="ml">Machine Learning</div>
+            <div class="category-tab" data-category="devops">DevOps</div>
+        </div>
+        
+        <div class="marketplace-container">
+            <div class="marketplace-filters">
+                <div class="filter-sidebar">
+                    <div class="filter-header">
+                        <span>Filters</span>
+                        <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Reset</button>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-title">Pricing Model</div>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" checked> Free
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" checked> Pay-as-you-go
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox"> Subscription
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-title">Deployment</div>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" checked> One-click
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox"> Manual
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <div class="filter-title">Ratings</div>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (45)
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (62)
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> (28)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="marketplace-main">
+                <div class="marketplace-grid">
+                    <!-- Monitoring Solutions -->
+                    <div class="marketplace-card" data-categories="monitoring" data-pricing="payg" data-deployment="one-click" data-rating="4.8">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Monitoring+Pro" alt="Monitoring Pro">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Monitoring Pro</h3>
+                                <span class="card-badge">Popular</span>
+                            </div>
+                            <div class="card-vendor">by Yntraa Cloud</div>
+                            <div class="card-description">
+                                Comprehensive monitoring solution with real-time alerts, dashboards, and AI-powered anomaly detection.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.05/resource/hr</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.8
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="marketplace-card" data-categories="monitoring" data-pricing="payg" data-deployment="one-click" data-rating="4.5">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Log+Analyzer" alt="Log Analyzer">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Log Analyzer</h3>
+                            </div>
+                            <div class="card-vendor">by Yntraa Cloud</div>
+                            <div class="card-description">
+                                Centralized log management with powerful search, analysis, and visualization capabilities.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.08/GB analyzed</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Database Solutions -->
+                    <div class="marketplace-card" data-categories="database" data-pricing="free" data-deployment="one-click" data-rating="4.9">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=MongoDB+Enterprise" alt="MongoDB Enterprise">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">MongoDB Enterprise</h3>
+                                <span class="card-badge">Featured</span>
+                            </div>
+                            <div class="card-vendor">by MongoDB Inc.</div>
+                            <div class="card-description">
+                                Fully managed MongoDB Enterprise with advanced security, monitoring, and backup features.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">Free</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.9
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="marketplace-card" data-categories="database" data-pricing="payg" data-deployment="manual" data-rating="4.7">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Redis+Pro" alt="Redis Pro">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Redis Pro</h3>
+                            </div>
+                            <div class="card-vendor">by Redis Labs</div>
+                            <div class="card-description">
+                                High-performance Redis with persistence, clustering, and enhanced security features.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.15/instance/hr</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.7
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Solutions -->
+                    <div class="marketplace-card" data-categories="security" data-pricing="subscription" data-deployment="one-click" data-rating="4.6">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=SecureShield" alt="SecureShield">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">SecureShield</h3>
+                                <span class="card-badge">New</span>
+                            </div>
+                            <div class="card-vendor">by Security Partners Inc.</div>
+                            <div class="card-description">
+                                Enterprise-grade security solution with firewall, intrusion detection, and vulnerability scanning.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$25/month</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.6
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="marketplace-card" data-categories="security" data-pricing="payg" data-deployment="one-click" data-rating="4.3">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Vault+Manager" alt="Vault Manager">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Vault Manager</h3>
+                            </div>
+                            <div class="card-vendor">by Security Partners Inc.</div>
+                            <div class="card-description">
+                                Secrets management and encryption key management for applications and infrastructure.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.02/secret/month</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.3
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Storage Solutions -->
+                    <div class="marketplace-card" data-categories="storage" data-pricing="payg" data-deployment="one-click" data-rating="4.4">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=DataVault" alt="DataVault">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">DataVault</h3>
+                            </div>
+                            <div class="card-vendor">by Storage Solutions</div>
+                            <div class="card-description">
+                                Encrypted cloud storage with automatic backup, versioning, and compliance features.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.03/GB/month</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.4
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="marketplace-card" data-categories="storage" data-pricing="payg" data-deployment="manual" data-rating="4.2">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Backup+Pro" alt="Backup Pro">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Backup Pro</h3>
+                            </div>
+                            <div class="card-vendor">by Storage Solutions</div>
+                            <div class="card-description">
+                                Automated backup solution with point-in-time recovery and cross-region replication.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.05/GB/month</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.2
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Networking Solutions -->
+                    <div class="marketplace-card" data-categories="networking" data-pricing="payg" data-deployment="one-click" data-rating="4.2">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Network+Analyzer" alt="Network Analyzer">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Network Analyzer</h3>
+                            </div>
+                            <div class="card-vendor">by NetTools</div>
+                            <div class="card-description">
+                                Real-time network traffic analysis with visualization and security threat detection.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">$0.10/GB analyzed</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.2
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="marketplace-card" data-categories="networking" data-pricing="free" data-deployment="one-click" data-rating="4.1">
+                        <div class="card-image">
+                            <img src="https://via.placeholder.com/300x150?text=Load+Balancer" alt="Load Balancer">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Load Balancer</h3>
+                            </div>
+                            <div class="card-vendor">by Yntraa Cloud</div>
+                            <div class="card-description">
+                                Distributes incoming traffic across multiple targets to ensure high availability.
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-price">Free</span>
+                                <span class="card-rating">
+                                    <i class="fas fa-star"></i> 4.1
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <button>5</button>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all elements
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const marketplaceCards = document.querySelectorAll('.marketplace-card');
+            const filterCheckboxes = document.querySelectorAll('.filter-options input[type="checkbox"]');
+            const resetFiltersBtn = document.querySelector('.filter-header button');
+            const searchInput = document.querySelector('.search-bar input');
+            const searchButton = document.querySelector('.search-bar button');
+            
+            // Current active category
+            let activeCategory = 'all';
+            
+            // Initialize the marketplace
+            function initMarketplace() {
+                filterProducts();
+            }
+            
+            // Filter products based on active category and filters
+            function filterProducts() {
+                // Get active filters
+                const activeFilters = {
+                    pricing: [],
+                    deployment: [],
+                    rating: []
+                };
+                
+                filterCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        const filterGroup = checkbox.closest('.filter-group');
+                        const filterType = filterGroup.querySelector('.filter-title').textContent.toLowerCase();
+                        
+                        if (filterType.includes('pricing')) {
+                            if (checkbox.parentElement.textContent.includes('Free')) {
+                                activeFilters.pricing.push('free');
+                            } else if (checkbox.parentElement.textContent.includes('Pay-as-you-go')) {
+                                activeFilters.pricing.push('payg');
+                            } else if (checkbox.parentElement.textContent.includes('Subscription')) {
+                                activeFilters.pricing.push('subscription');
+                            }
+                        } else if (filterType.includes('deployment')) {
+                            if (checkbox.parentElement.textContent.includes('One-click')) {
+                                activeFilters.deployment.push('one-click');
+                            } else if (checkbox.parentElement.textContent.includes('Manual')) {
+                                activeFilters.deployment.push('manual');
+                            }
+                        } else if (filterType.includes('rating')) {
+                            if (checkbox.parentElement.textContent.includes('5')) {
+                                activeFilters.rating.push(4.5);
+                            } else if (checkbox.parentElement.textContent.includes('4')) {
+                                activeFilters.rating.push(4.0);
+                            } else if (checkbox.parentElement.textContent.includes('3')) {
+                                activeFilters.rating.push(3.0);
+                            }
+                        }
+                    }
+                });
+                
+                // Filter cards
+                marketplaceCards.forEach(card => {
+                    const cardCategory = card.dataset.categories;
+                    const cardPricing = card.dataset.pricing;
+                    const cardDeployment = card.dataset.deployment;
+                    const cardRating = parseFloat(card.dataset.rating);
+                    
+                    // Category filter
+                    const categoryMatch = activeCategory === 'all' || cardCategory === activeCategory;
+                    
+                    // Pricing filter
+                    const pricingMatch = activeFilters.pricing.length === 0 || activeFilters.pricing.includes(cardPricing);
+                    
+                    // Deployment filter
+                    const deploymentMatch = activeFilters.deployment.length === 0 || activeFilters.deployment.includes(cardDeployment);
+                    
+                    // Rating filter
+                    let ratingMatch = activeFilters.rating.length === 0;
+                    if (!ratingMatch) {
+                        for (const minRating of activeFilters.rating) {
+                            if (cardRating >= minRating) {
+                                ratingMatch = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Show/hide based on all filters
+                    if (categoryMatch && pricingMatch && deploymentMatch && ratingMatch) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Category tab click handler
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Set active category
+                    activeCategory = this.dataset.category;
+                    
+                    // Filter products
+                    filterProducts();
+                });
+            });
+            
+            // Filter checkbox change handler
+            filterCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', filterProducts);
+            });
+            
+            // Reset filters button
+            resetFiltersBtn.addEventListener('click', function() {
+                // Uncheck all checkboxes
+                filterCheckboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Check default filters (free and pay-as-you-go)
+                document.querySelectorAll('.filter-options input[type="checkbox"]').forEach(checkbox => {
+                    if (checkbox.parentElement.textContent.includes('Free') || 
+                        checkbox.parentElement.textContent.includes('Pay-as-you-go') ||
+                        checkbox.parentElement.textContent.includes('One-click')) {
+                        checkbox.checked = true;
+                    }
+                });
+                
+                // Reset to all categories
+                document.querySelector('.category-tab.active').classList.remove('active');
+                document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+                activeCategory = 'all';
+                
+                // Re-filter
+                filterProducts();
+            });
+            
+            // Search functionality
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                if (searchTerm) {
+                    marketplaceCards.forEach(card => {
+                        const title = card.querySelector('.card-title').textContent.toLowerCase();
+                        const description = card.querySelector('.card-description').textContent.toLowerCase();
+                        const vendor = card.querySelector('.card-vendor').textContent.toLowerCase();
+                        
+                        if (title.includes(searchTerm)) {
+                            card.classList.remove('hidden');
+                        } else if (description.includes(searchTerm)) {
+                            card.classList.remove('hidden');
+                        } else if (vendor.includes(searchTerm)) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                } else {
+                    filterProducts();
+                }
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Initialize the marketplace
+            initMarketplace();
+        });
+    </script>
+</body>
+</html>

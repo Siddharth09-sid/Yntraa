@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .search-bar button {
+            padding: 0.7rem 1.5rem;
+        }
+        
+        .doc-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .doc-category {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .doc-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(74, 107, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .category-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .category-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .doc-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .doc-link {
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border);
+        }
+        
+        .doc-link:first-child {
+            border-top: none;
+        }
+        
+        .doc-link a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .doc-link a:hover {
+            color: var(--primary);
+        }
+        
+        .doc-link i {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        .popular-articles {
+            margin-top: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-title i {
+            color: var(--primary);
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .article-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .article-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .article-excerpt {
+            font-size: 0.9rem;
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+        
+        .article-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .article-link i {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+        
+        .article-link:hover i {
+            transform: translateX(3px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .doc-categories {
+                grid-template-columns: 1fr;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li >
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li class="active">
+                <a href="./documentation.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Documentation</a>
+                <span class="separator">/</span>
+                <span>Home</span>
+            </div>
+            <h1 class="page-title">Documentation</h1>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Search documentation...">
+            <button class="btn btn-primary">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+        
+        <div class="doc-categories">
+            <!-- Getting Started Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2 class="category-title">Getting Started</h2>
+                </div>
+                <p class="category-description">New to Yntraa Cloud? Start here to learn the basics.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Introduction to Yntraa Cloud
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Creating Your First Account
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Setting Up Billing
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Quick Start Guide
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Compute Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h2 class="category-title">Compute</h2>
+                </div>
+                <p class="category-description">Virtual machines, containers, and serverless computing.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Creating Virtual Machines
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Managing Kubernetes Clusters
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Serverless Functions Guide
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Auto Scaling Configuration
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Storage Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <h2 class="category-title">Storage</h2>
+                </div>
+                <p class="category-description">Block storage, object storage, and file systems.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Block Storage Volumes
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Object Storage with S3 API
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Managed File Systems
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Backup and Snapshot Guide
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Database Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h2 class="category-title">Database</h2>
+                </div>
+                <p class="category-description">Managed database services and data solutions.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Managed PostgreSQL
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            MongoDB Atlas Integration
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Redis Cache Setup
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Database Migration Guide
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Networking Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h2 class="category-title">Networking</h2>
+                </div>
+                <p class="category-description">VPCs, load balancers, and network security.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Virtual Private Cloud (VPC)
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Load Balancer Configuration
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            DNS and Domain Management
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Network Security Groups
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Security Category -->
+            <div class="doc-category">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="category-title">Security</h2>
+                </div>
+                <p class="category-description">IAM, encryption, and compliance features.</p>
+                <ul class="doc-links">
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Identity and Access Management
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Data Encryption at Rest
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Security Best Practices
+                        </a>
+                    </li>
+                    <li class="doc-link">
+                        <a href="#">
+                            <i class="fas fa-chevron-right"></i>
+                            Compliance Certifications
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="popular-articles">
+            <h2 class="section-title">
+                <i class="fas fa-fire"></i> Popular Articles
+            </h2>
+            
+            <div class="articles-grid">
+                <div class="article-card">
+                    <h3 class="article-title">Troubleshooting Common VM Issues</h3>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> 15 min read</span>
+                        <span><i class="far fa-eye"></i> 1,245 views</span>
+                    </div>
+                    <p class="article-excerpt">Learn how to diagnose and resolve the most common virtual machine performance and connectivity issues.</p>
+                    <a href="#" class="article-link">
+                        Read article <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="article-card">
+                    <h3 class="article-title">Cost Optimization Strategies</h3>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> 10 min read</span>
+                        <span><i class="far fa-eye"></i> 2,387 views</span>
+                    </div>
+                    <p class="article-excerpt">Discover proven techniques to reduce your cloud spending while maintaining performance.</p>
+                    <a href="#" class="article-link">
+                        Read article <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="article-card">
+                    <h3 class="article-title">Migrating from AWS to Yntraa Cloud</h3>
+                    <div class="article-meta">
+                        <span><i class="far fa-clock"></i> 25 min read</span>
+                        <span><i class="far fa-eye"></i> 892 views</span>
+                    </div>
+                    <p class="article-excerpt">Step-by-step guide to migrating your workloads from AWS with minimal downtime.</p>
+                    <a href="#" class="article-link">
+                        Read article <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar input');
+            const searchButton = document.querySelector('.search-bar button');
+            
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    alert(`Searching for: ${searchTerm}`);
+                    // In a real app, this would trigger a search API call
+                }
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+            
+            // Category card click handler (for mobile)
+            document.querySelectorAll('.doc-category').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Only trigger if clicked on the card itself, not a link
+                    if (e.target === this) {
+                        const firstLink = this.querySelector('.doc-link a');
+                        if (firstLink) {
+                            window.location.href = firstLink.href;
+                        }
+                    }
+                });
+            });
+            
+            // Article card click handler (for mobile)
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Only trigger if clicked on the card itself, not a link
+                    if (e.target === this) {
+                        const link = this.querySelector('.article-link');
+                        if (link) {
+                            window.location.href = link.href;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

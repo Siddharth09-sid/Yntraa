@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yntraa DBaaS Pricing Calculator</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #e0e7ff;
+            --primary-dark: #F29F43;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --border: #d5d9e0;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--dark);
+        }
+        
+        .calculator-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .configuration-panel {
+            flex: 1;
+            background: #f9fafc;
+            border-radius: 8px;
+            padding: 25px;
+        }
+        
+        .summary-panel {
+            width: 350px;
+            background: #f9fafc;
+            border-radius: 8px;
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .option-group {
+            margin-bottom: 25px;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option-title svg {
+            margin-right: 8px;
+            color: var(--gray);
+        }
+        
+        .option-choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .option-choice {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            background: white;
+        }
+        
+        .option-choice:hover {
+            border-color: var(--primary);
+        }
+        
+        .option-choice.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: white;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .price-display {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 15px 0;
+            color: var(--primary);
+        }
+        
+        .price-breakdown {
+            margin-top: 20px;
+            border-top: 1px solid var(--light-gray);
+            padding-top: 15px;
+        }
+        
+        .price-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .price-line.total {
+            font-weight: 600;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .price-line.subtotal {
+            font-weight: 500;
+            border-top: 1px dashed var(--light-gray);
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        
+        .deploy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        
+        .deploy-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .slider-container {
+            margin-top: 15px;
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--light-gray);
+            border-radius: 3px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .checkbox-container input {
+            margin-right: 10px;
+        }
+        
+        .info-text {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .sub-option {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 2px solid var(--light-gray);
+        }
+        
+        .sub-option-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+        
+        .price-section {
+            margin-top: 15px;
+        }
+        
+        .price-section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .license-info {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 3px;
+        }
+
+        /* Database Type Dropdown Styles */
+        .database-type-selector {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .database-type-btn {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .database-type-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .database-type-dropdown {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-top: 5px;
+            z-index: 10;
+            display: none;
+        }
+
+        .database-type-dropdown.show {
+            display: block;
+        }
+
+        .database-type-option {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .database-type-option:hover {
+            background-color: var(--primary-light);
+        }
+
+        .database-type-option.selected {
+            background-color: var(--primary-light);
+            font-weight: 500;
+        }
+
+        .database-engine-selector {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .database-engine-selector.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database as a Service Pricing Calculator</h1>
+    <p>Estimate your monthly costs for Yntraa managed database services</p>
+    
+    <div class="calculator-container">
+        <div class="configuration-panel">
+            <!-- Region Selection -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Region
+                </div>
+                <div class="option-choices">
+                    <div class="option-choice selected" data-region="mumbai" data-region-multiplier="1.0">
+                        Mumbai NM1
+                    </div>
+                    <div class="option-choice" data-region="delhi" data-region-multiplier="1.1">
+                        Delhi D1 (+10%)
+                    </div>
+                    <div class="option-choice" data-region="gujrat" data-region-multiplier="1.05">
+                        Gujrat G1 (+5%)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Database Type and Engine Selection -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                    Database Engine
+                </div>
+                
+                <!-- Database Type Selector -->
+                <div class="database-type-selector">
+                    <button class="database-type-btn" id="database-type-btn">
+                        <span id="selected-database-type">Select Database Type</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="database-type-dropdown" id="database-type-dropdown">
+                        <div class="database-type-option" data-type="relational">Relational Databases</div>
+                        <div class="database-type-option" data-type="non-relational">Non-Relational Databases</div>
+                    </div>
+                </div>
+                
+                <!-- Relational Database Engines -->
+                <div class="database-engine-selector" id="relational-engine-selector">
+                    <select id="relational-engine-select">
+                        <option value="">Select Relational Database</option>
+                        <option value="mysql">MySQL</option>
+                        <option value="postgresql">PostgreSQL</option>
+                        <option value="mssql">MSSQL</option>
+                        <option value="oracle">Oracle</option>
+                    </select>
+                </div>
+                
+                <!-- Non-Relational Database Engines -->
+                <div class="database-engine-selector" id="non-relational-engine-selector">
+                    <select id="non-relational-engine-select">
+                        <option value="">Select Non-Relational Database</option>
+                        <option value="mongodb">MongoDB</option>
+                        <option value="cassandra">Cassandra</option>
+                        <option value="redis">Redis</option>
+                        <option value="elasticsearch">Elasticsearch</option>
+                        <option value="opensearch">OpenSearch</option>
+                        <option value="hadoop">Hadoop</option>
+                        <option value="oracle-nosql">Oracle NoSQL</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Database Version -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 17 10 11 4 5"></polyline>
+                        <line x1="12" y1="19" x2="20" y2="19"></line>
+                    </svg>
+                    Database Version
+                </div>
+                <div class="option-choices" id="version-choices">
+                    <div class="option-choice selected" data-version="community">Community</div>
+                    <div class="option-choice" data-version="enterprise">Enterprise</div>
+                </div>
+                <div id="byol-container" class="hidden">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="byol-checkbox">
+                        <label for="byol-checkbox">Bring Your Own License (BYOL)</label>
+                    </div>
+                    <div class="info-text">You provide the enterprise license, we'll apply a 20% discount</div>
+                </div>
+                <div id="license-info" class="license-info"></div>
+            </div>
+            
+            <!-- Operating System -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    Operating System
+                </div>
+                <div class="option-choices">
+                    <div class="option-choice selected" data-os="ubuntu" data-os-price="0">Ubuntu (Free)</div>
+                    <div class="option-choice" data-os="rhel" data-os-price="30">RHEL ($30 per 2 vCPU)</div>
+                    <div class="option-choice" data-os="suse" data-os-price="20">SUSE ($20 per 2 vCPU)</div>
+                    <div class="option-choice" data-os="windows" data-os-price="50">Windows ($50 per 2 vCPU)</div>
+                    <div class="option-choice" data-os="centos" data-os-price="10">CentOS ($10 per 2 vCPU)</div>
+                </div>
+            </div>
+            
+            <!-- Plan -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    Plan
+                </div>
+                <div class="option-choices">
+                    <div class="option-choice selected" data-plan="basic" data-plan-multiplier="1.0">Basic</div>
+                    <div class="option-choice" data-plan="general" data-plan-multiplier="1.5">General Purpose</div>
+                    <div class="option-choice" data-plan="memory" data-plan-multiplier="2.0">Memory Optimized</div>
+                </div>
+            </div>
+            
+            <!-- Node Size (now a dropdown) -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    Node Size
+                </div>
+                <select id="node-size-select">
+                    <!-- Options will be populated by JavaScript based on plan selection -->
+                </select>
+            </div>
+            
+            <!-- Nodes -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Nodes
+                </div>
+                <div class="slider-container">
+                    <input type="range" min="1" max="10" value="1" class="slider" id="nodes-slider">
+                    <div class="slider-labels">
+                        <span>1 (Standalone)</span>
+                        <span>10</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Storage -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                        <line x1="12" y1="12" x2="12" y2="12.01"></line>
+                    </svg>
+                    Storage
+                </div>
+                <div class="slider-container">
+                    <input type="range" min="10" max="1000" value="10" class="slider" id="storage-slider">
+                    <div class="slider-labels">
+                        <span>10GB</span>
+                        <span>1TB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Network & Security - Now bifurcated -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Network & Security
+                </div>
+                
+                <div class="sub-option">
+                    <div class="sub-option-title">Network Configuration</div>
+                    <div class="option-choices">
+                        <div class="option-choice selected" data-network="standard" data-network-price="0">Standard</div>
+                        <div class="option-choice" data-network="enhanced" data-network-price="20">Enhanced (+$20)</div>
+                        <div class="option-choice" data-network="premium" data-network-price="50">Premium (+$50)</div>
+                    </div>
+                    <div class="info-text">
+                        Standard: Public endpoint. Enhanced: VPC peering + private endpoint. Premium: Enhanced + dedicated connection.
+                    </div>
+                </div>
+                
+                <div class="sub-option">
+                    <div class="sub-option-title">Security Options</div>
+                    <div class="option-choices">
+                        <div class="option-choice selected" data-security="basic" data-security-price="0">Basic</div>
+                        <div class="option-choice" data-security="advanced" data-security-price="15">Advanced (+$15)</div>
+                        <div class="option-choice" data-security="enterprise" data-security-price="30">Enterprise (+$30)</div>
+                    </div>
+                    <div class="info-text">
+                        Basic: Standard encryption. Advanced: +DDoS protection. Enterprise: Advanced + WAF + audit logging.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Backup Retention -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Backup Retention
+                </div>
+                <div class="option-choices">
+                    <div class="option-choice selected" data-backup="7" data-backup-price="0">7 days (free)</div>
+                    <div class="option-choice" data-backup="14" data-backup-price="10">14 days (+$10)</div>
+                    <div class="option-choice" data-backup="30" data-backup-price="20">30 days (+$20)</div>
+                </div>
+            </div>
+            
+            <!-- Support Tier -->
+            <div class="option-group">
+                <div class="option-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    Support Tier
+                </div>
+                <div class="option-choices">
+                    <div class="option-choice selected" data-support="standard" data-support-percent="0">Standard (free)</div>
+                    <div class="option-choice" data-support="business" data-support-percent="8">Business (+8%)</div>
+                    <div class="option-choice" data-support="business-pro" data-support-percent="15">Business Pro (+15%)</div>
+                </div>
+                <div class="info-text">
+                    Business: 24/7 support with 4hr response. Business Pro: 24/7 with 1hr response and dedicated account manager.
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-panel">
+            <h2>Estimated Monthly Cost</h2>
+            <div class="price-display" id="total-price">$300.00</div>
+            
+            <div class="price-breakdown">
+                <div class="price-section">
+                    <div class="price-section-title">Compute Resources</div>
+                    <div class="price-line">
+                        <span>Node Size</span>
+                        <span id="node-size-cost">$15.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Nodes</span>
+                        <span id="nodes-count">1 × $15.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Operating System</span>
+                        <span id="os-cost">$0.00</span>
+                    </div>
+                    <div class="price-line subtotal">
+                        <span>Subtotal</span>
+                        <span id="compute-subtotal">$15.00</span>
+                    </div>
+                </div>
+                
+                <div class="price-section">
+                    <div class="price-section-title">Database Resources</div>
+                    <div class="price-line">
+                        <span>Database License</span>
+                        <span id="database-cost">$300.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Version</span>
+                        <span id="version-cost">Community</span>
+                    </div>
+                    <div class="price-line">
+                        <span>License Details</span>
+                        <span id="license-details">MySQL Community</span>
+                    </div>
+                    <div class="price-line subtotal">
+                        <span>Subtotal</span>
+                        <span id="database-subtotal">$300.00</span>
+                    </div>
+                </div>
+                
+                <div class="price-section">
+                    <div class="price-section-title">Additional Services</div>
+                    <div class="price-line">
+                        <span>Storage (10GB)</span>
+                        <span id="storage-cost">$1.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Backups</span>
+                        <span id="backup-cost">$0.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Network</span>
+                        <span id="network-cost">$0.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Security</span>
+                        <span id="security-cost">$0.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Support</span>
+                        <span id="support-cost">$0.00</span>
+                    </div>
+                    <div class="price-line">
+                        <span>Region</span>
+                        <span id="region-cost">Mumbai NM1</span>
+                    </div>
+                </div>
+                
+                <div class="price-line total">
+                    <span>Total</span>
+                    <span id="final-price">$316.00</span>
+                </div>
+            </div>
+            
+            <button class="deploy-btn">Deploy Database</button>
+        </div>
+    </div>
+
+    <script>
+        // Pricing configuration
+        const storagePricePerGB = 0.10;
+        
+        // Database pricing configuration
+        const databasePricing = {
+            mysql: {
+                community: { price: 300, unit: "per node", maxVcpu: null },
+                enterprise: { price: 1950, unit: "per license (up to 16 vCPU)", maxVcpu: 16 }
+            },
+            postgresql: {
+                community: { price: 500, unit: "per node", maxVcpu: null },
+                enterprise: { price: 1300, unit: "per vCPU", maxVcpu: null }
+            },
+            mssql: {
+                community: { price: 1000, unit: "per license (2 vCPU)", maxVcpu: 2 },
+                enterprise: { price: 2800, unit: "per license (2 vCPU)", maxVcpu: 2 }
+            },
+            oracle: {
+                community: { price: 1500, unit: "per 2 vCPU", maxVcpu: 2 },
+                enterprise: { price: 3000, unit: "per 2 vCPU", maxVcpu: 2 }
+            },
+            'oracle-nosql': {
+                community: { price: 2500, unit: "per node", maxVcpu: null },
+                enterprise: null
+            },
+            mongodb: {
+                community: { price: 500, unit: "per node", maxVcpu: null },
+                enterprise: { price: 5100, unit: "per node", maxVcpu: null }
+            },
+            redis: {
+                community: { price: 1300, unit: "per shard", maxVcpu: null },
+                enterprise: { price: 3500, unit: "per shard", maxVcpu: null }
+            },
+            cassandra: {
+                community: { price: 3300, unit: "per node", maxVcpu: null },
+                enterprise: { price: 6300, unit: "per node", maxVcpu: null }
+            },
+            opensearch: {
+                community: { price: 2500, unit: "per node", maxVcpu: null },
+                enterprise: null
+            },
+            elasticsearch: {
+                community: null,
+                enterprise: { price: 4200, unit: "per node", maxVcpu: null }
+            },
+            hadoop: {
+                community: { price: 1750, unit: "per node", maxVcpu: null },
+                enterprise: null
+            }
+        };
+        
+        // Node size configurations by plan
+        const nodeSizes = {
+            basic: [
+                { value: "small", label: "1 vCPU, 2GB RAM (DB-BASIC-S)", price: 15, vcpu: 1 },
+                { value: "medium1", label: "2 vCPU, 2GB RAM (DB-BASIC-M1)", price: 20, vcpu: 2 },
+                { value: "medium2", label: "2 vCPU, 4GB RAM (DB-BASIC-M2)", price: 25, vcpu: 2 },
+                { value: "large", label: "4 vCPU, 8GB RAM (DB-BASIC-L)", price: 40, vcpu: 4 },
+                { value: "xlarge", label: "8 vCPU, 16GB RAM (DB-BASIC-XL)", price: 75, vcpu: 8 }
+            ],
+            general: [
+                { value: "medium", label: "2 vCPU, 8GB RAM (DB-GEN-M)", price: 40, vcpu: 2 },
+                { value: "large", label: "4 vCPU, 16GB RAM (DB-GEN-L)", price: 80, vcpu: 4 },
+                { value: "xlarge", label: "8 vCPU, 32GB RAM (DB-GEN-XL)", price: 160, vcpu: 8 },
+                { value: "2xlarge", label: "16 vCPU, 64GB RAM (DB-GEN-2XL)", price: 320, vcpu: 16 },
+                { value: "4xlarge", label: "32 vCPU, 128GB RAM (DB-GEN-4XL)", price: 640, vcpu: 32 },
+                { value: "6xlarge", label: "48 vCPU, 192GB RAM (DB-GEN-6XL)", price: 960, vcpu: 48 }
+            ],
+            memory: [
+                { value: "medium", label: "2 vCPU, 16GB RAM (DB-MEM-M)", price: 50, vcpu: 2 },
+                { value: "large", label: "4 vCPU, 32GB RAM (DB-MEM-L)", price: 100, vcpu: 4 },
+                { value: "xlarge", label: "8 vCPU, 64GB RAM (DB-MEM-XL)", price: 200, vcpu: 8 },
+                { value: "2xlarge", label: "16 vCPU, 128GB RAM (DB-MEM-2XL)", price: 400, vcpu: 16 },
+                { value: "4xlarge", label: "32 vCPU, 256GB RAM (DB-MEM-4XL)", price: 800, vcpu: 32 },
+                { value: "6xlarge", label: "48 vCPU, 384GB RAM (DB-MEM-6XL)", price: 1200, vcpu: 48 }
+            ]
+        };
+        
+        // Get all interactive elements
+        const regionOptions = document.querySelectorAll('[data-region]');
+        const versionOptions = document.querySelectorAll('[data-version]');
+        const versionChoices = document.getElementById('version-choices');
+        const osOptions = document.querySelectorAll('[data-os]');
+        const planOptions = document.querySelectorAll('[data-plan]');
+        const nodeSizeSelect = document.getElementById('node-size-select');
+        const nodesSlider = document.getElementById('nodes-slider');
+        const storageSlider = document.getElementById('storage-slider');
+        const networkOptions = document.querySelectorAll('[data-network]');
+        const securityOptions = document.querySelectorAll('[data-security]');
+        const backupOptions = document.querySelectorAll('[data-backup]');
+        const supportOptions = document.querySelectorAll('[data-support]');
+        const byolCheckbox = document.getElementById('byol-checkbox');
+        const byolContainer = document.getElementById('byol-container');
+        const licenseInfo = document.getElementById('license-info');
+        
+        // Database type and engine selection elements
+        const databaseTypeBtn = document.getElementById('database-type-btn');
+        const databaseTypeDropdown = document.getElementById('database-type-dropdown');
+        const databaseTypeOptions = document.querySelectorAll('.database-type-option');
+        const relationalEngineSelect = document.getElementById('relational-engine-select');
+        const nonRelationalEngineSelect = document.getElementById('non-relational-engine-select');
+        const relationalEngineSelector = document.getElementById('relational-engine-selector');
+        const nonRelationalEngineSelector = document.getElementById('non-relational-engine-selector');
+        const selectedDatabaseType = document.getElementById('selected-database-type');
+        
+        // Get display elements
+        const totalPriceEl = document.getElementById('total-price');
+        const nodeSizeCostEl = document.getElementById('node-size-cost');
+        const nodesCountEl = document.getElementById('nodes-count');
+        const osCostEl = document.getElementById('os-cost');
+        const computeSubtotalEl = document.getElementById('compute-subtotal');
+        const databaseCostEl = document.getElementById('database-cost');
+        const versionCostEl = document.getElementById('version-cost');
+        const licenseDetailsEl = document.getElementById('license-details');
+        const databaseSubtotalEl = document.getElementById('database-subtotal');
+        const storageCostEl = document.getElementById('storage-cost');
+        const backupCostEl = document.getElementById('backup-cost');
+        const networkCostEl = document.getElementById('network-cost');
+        const securityCostEl = document.getElementById('security-cost');
+        const supportCostEl = document.getElementById('support-cost');
+        const regionCostEl = document.getElementById('region-cost');
+        const finalPriceEl = document.getElementById('final-price');
+        
+        // Set initial selected values
+        let selectedRegion = 'mumbai';
+        let selectedRegionMultiplier = 1.0;
+        let selectedRegionName = 'Mumbai NM1';
+        let selectedEngine = 'mysql';
+        let selectedVersion = 'community';
+        let selectedOs = 'ubuntu';
+        let selectedOsPrice = 0;
+        let selectedPlan = 'basic';
+        let selectedPlanMultiplier = 1.0;
+        let selectedSize = 'small';
+        let selectedSizePrice = 15;
+        let selectedVcpu = 1;
+        let selectedNodes = 1;
+        let selectedStorage = 10;
+        let selectedNetwork = 'standard';
+        let selectedNetworkPrice = 0;
+        let selectedSecurity = 'basic';
+        let selectedSecurityPrice = 0;
+        let selectedBackup = '7';
+        let selectedBackupPrice = 0;
+        let selectedSupport = 'standard';
+        let selectedSupportPercent = 0;
+        let byolSelected = false;
+        let selectedDatabaseTypeValue = 'relational';
+        
+        // Initialize node size dropdown based on default plan (basic)
+        updateNodeSizeOptions(selectedPlan);
+        updateVersionOptions();
+        
+        // Add event listeners for database type selection
+        databaseTypeBtn.addEventListener('click', () => {
+            databaseTypeDropdown.classList.toggle('show');
+        });
+        
+        databaseTypeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Update selected type
+                selectedDatabaseTypeValue = option.getAttribute('data-type');
+                selectedDatabaseType.textContent = option.textContent;
+                
+                // Hide both engine selectors initially
+                relationalEngineSelector.classList.remove('show');
+                nonRelationalEngineSelector.classList.remove('show');
+                
+                // Show the appropriate engine selector
+                if (selectedDatabaseTypeValue === 'relational') {
+                    relationalEngineSelector.classList.add('show');
+                    // Set default selection
+                    selectedEngine = 'mysql';
+                    relationalEngineSelect.value = 'mysql';
+                } else {
+                    nonRelationalEngineSelector.classList.add('show');
+                    // Set default selection
+                    selectedEngine = 'mongodb';
+                    nonRelationalEngineSelect.value = 'mongodb';
+                }
+                
+                // Close dropdown
+                databaseTypeDropdown.classList.remove('show');
+                
+                // Update version options based on new engine selection
+                updateVersionOptions();
+                calculatePrice();
+            });
+        });
+        
+        // Add event listeners for engine selection
+        relationalEngineSelect.addEventListener('change', () => {
+            selectedEngine = relationalEngineSelect.value;
+            updateVersionOptions();
+            calculatePrice();
+        });
+        
+        nonRelationalEngineSelect.addEventListener('change', () => {
+            selectedEngine = nonRelationalEngineSelect.value;
+            updateVersionOptions();
+            calculatePrice();
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.database-type-selector')) {
+                databaseTypeDropdown.classList.remove('show');
+            }
+        });
+        
+        // Add event listeners for other options
+        regionOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                regionOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedRegion = option.getAttribute('data-region');
+                selectedRegionMultiplier = parseFloat(option.getAttribute('data-region-multiplier'));
+                selectedRegionName = option.textContent.trim();
+                calculatePrice();
+            });
+        });
+        
+        versionOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                versionOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedVersion = option.getAttribute('data-version');
+                
+                // Show/hide BYOL container based on version and engine
+                if (selectedVersion === 'enterprise' && databasePricing[selectedEngine].enterprise) {
+                    byolContainer.classList.remove('hidden');
+                } else {
+                    byolContainer.classList.add('hidden');
+                    byolSelected = false;
+                    byolCheckbox.checked = false;
+                }
+                
+                updateLicenseInfo();
+                calculatePrice();
+            });
+        });
+        
+        osOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                osOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedOs = option.getAttribute('data-os');
+                selectedOsPrice = parseFloat(option.getAttribute('data-os-price'));
+                calculatePrice();
+            });
+        });
+        
+        planOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                planOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedPlan = option.getAttribute('data-plan');
+                selectedPlanMultiplier = parseFloat(option.getAttribute('data-plan-multiplier'));
+                
+                // Update node size options when plan changes
+                updateNodeSizeOptions(selectedPlan);
+                calculatePrice();
+            });
+        });
+        
+        nodeSizeSelect.addEventListener('change', () => {
+            const selectedOption = nodeSizeSelect.options[nodeSizeSelect.selectedIndex];
+            selectedSize = selectedOption.value;
+            selectedSizePrice = parseFloat(selectedOption.getAttribute('data-price'));
+            selectedVcpu = parseInt(selectedOption.getAttribute('data-vcpu'));
+            calculatePrice();
+        });
+        
+        nodesSlider.addEventListener('input', () => {
+            selectedNodes = parseInt(nodesSlider.value);
+            calculatePrice();
+        });
+        
+        storageSlider.addEventListener('input', () => {
+            selectedStorage = parseInt(storageSlider.value);
+            calculatePrice();
+        });
+        
+        networkOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                networkOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedNetwork = option.getAttribute('data-network');
+                selectedNetworkPrice = parseFloat(option.getAttribute('data-network-price'));
+                calculatePrice();
+            });
+        });
+        
+        securityOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                securityOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedSecurity = option.getAttribute('data-security');
+                selectedSecurityPrice = parseFloat(option.getAttribute('data-security-price'));
+                calculatePrice();
+            });
+        });
+        
+        backupOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                backupOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedBackup = option.getAttribute('data-backup');
+                selectedBackupPrice = parseFloat(option.getAttribute('data-backup-price'));
+                calculatePrice();
+            });
+        });
+        
+        supportOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                supportOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedSupport = option.getAttribute('data-support');
+                selectedSupportPercent = parseFloat(option.getAttribute('data-support-percent'));
+                calculatePrice();
+            });
+        });
+        
+        byolCheckbox.addEventListener('change', () => {
+            byolSelected = byolCheckbox.checked;
+            calculatePrice();
+        });
+        
+        // Update version options based on selected engine
+        function updateVersionOptions() {
+            const enginePricing = databasePricing[selectedEngine];
+            
+            // Clear existing options
+            versionChoices.innerHTML = '';
+            
+            // Add community version if available
+            if (enginePricing.community) {
+                const communityOption = document.createElement('div');
+                communityOption.className = 'option-choice selected';
+                communityOption.setAttribute('data-version', 'community');
+                communityOption.textContent = 'Community';
+                versionChoices.appendChild(communityOption);
+                selectedVersion = 'community';
+            }
+            
+            // Add enterprise version if available
+            if (enginePricing.enterprise) {
+                const enterpriseOption = document.createElement('div');
+                enterpriseOption.className = 'option-choice';
+                if (!enginePricing.community) {
+                    enterpriseOption.classList.add('selected');
+                    selectedVersion = 'enterprise';
+                }
+                enterpriseOption.setAttribute('data-version', 'enterprise');
+                enterpriseOption.textContent = 'Enterprise';
+                versionChoices.appendChild(enterpriseOption);
+            }
+            
+            // Update event listeners for new options
+            document.querySelectorAll('[data-version]').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('[data-version]').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedVersion = option.getAttribute('data-version');
+                    
+                    if (selectedVersion === 'enterprise' && databasePricing[selectedEngine].enterprise) {
+                        byolContainer.classList.remove('hidden');
+                    } else {
+                        byolContainer.classList.add('hidden');
+                        byolSelected = false;
+                        byolCheckbox.checked = false;
+                    }
+                    
+                    updateLicenseInfo();
+                    calculatePrice();
+                });
+            });
+            
+            updateLicenseInfo();
+        }
+        
+        // Update license information display
+        function updateLicenseInfo() {
+            const enginePricing = databasePricing[selectedEngine];
+            const versionPricing = selectedVersion === 'community' ? enginePricing.community : enginePricing.enterprise;
+            
+            if (versionPricing) {
+                licenseInfo.textContent = `${selectedEngine.toUpperCase()} ${selectedVersion}: $${versionPricing.price} ${versionPricing.unit}`;
+            } else {
+                licenseInfo.textContent = '';
+            }
+        }
+        
+        // Update node size options based on selected plan
+        function updateNodeSizeOptions(plan) {
+            // Clear existing options
+            nodeSizeSelect.innerHTML = '';
+            
+            // Add new options based on plan
+            nodeSizes[plan].forEach(size => {
+                const option = document.createElement('option');
+                option.value = size.value;
+                option.textContent = size.label;
+                option.setAttribute('data-price', size.price);
+                option.setAttribute('data-vcpu', size.vcpu);
+                nodeSizeSelect.appendChild(option);
+            });
+            
+            // Update selected size and price
+            selectedSize = nodeSizes[plan][0].value;
+            selectedSizePrice = nodeSizes[plan][0].price;
+            selectedVcpu = nodeSizes[plan][0].vcpu;
+        }
+        
+        // Calculate the total price
+        function calculatePrice() {
+            const enginePricing = databasePricing[selectedEngine];
+            const versionPricing = selectedVersion === 'community' ? enginePricing.community : enginePricing.enterprise;
+            
+            // Compute costs (node size + OS)
+            const nodeCost = selectedSizePrice * selectedPlanMultiplier * selectedNodes;
+            
+            // Calculate OS licenses needed (1 license per 2 vCPU, rounded up)
+            let osCost = 0;
+            let osLicenses = 1; // Default for Ubuntu (free)
+            
+            if (selectedOs !== 'ubuntu') {
+                osLicenses = Math.ceil(selectedVcpu / 2); // Round up to nearest integer
+                osCost = osLicenses * selectedOsPrice * selectedNodes;
+            }
+            
+            // Compute total costs
+            const computeSubtotal = (selectedSizePrice * selectedPlanMultiplier * selectedNodes + osCost) * selectedRegionMultiplier;
+            
+            // Database license cost calculation
+            let databaseSubtotal = 0;
+            let licenseDetails = '';
+            
+            if (versionPricing) {
+                let licenseCost = versionPricing.price;
+                let licensesNeeded = 1;
+                
+                // Apply BYOL discount if selected
+                if (byolSelected && selectedVersion === 'enterprise') {
+                    licenseCost = licenseCost * 0.8;
+                    licenseDetails = `${selectedEngine.toUpperCase()} Enterprise (BYOL)`;
+                } else {
+                    licenseDetails = `${selectedEngine.toUpperCase()} ${selectedVersion}`;
+                }
+                
+                // Calculate licenses needed based on vCPU requirements
+                if (versionPricing.maxVcpu && selectedVcpu > versionPricing.maxVcpu) {
+                    licensesNeeded = Math.ceil(selectedVcpu / versionPricing.maxVcpu);
+                }
+                
+                // Special case for PostgreSQL Enterprise (per vCPU)
+                if (selectedEngine === 'postgresql' && selectedVersion === 'enterprise') {
+                    licenseCost = licenseCost * selectedVcpu;
+                    licenseDetails += ` (${selectedVcpu} vCPU)`;
+                }
+                
+                // Special case for Redis (per shard)
+                if (selectedEngine === 'redis') {
+                    licenseDetails += ` (${selectedNodes} shard${selectedNodes > 1 ? 's' : ''})`;
+                    databaseSubtotal = licenseCost * selectedNodes * selectedRegionMultiplier;
+                } 
+                // For all other databases
+                else {
+                    databaseSubtotal = licenseCost * licensesNeeded * selectedNodes * selectedRegionMultiplier;
+                    if (licensesNeeded > 1) {
+                        licenseDetails += ` (${licensesNeeded} license${licensesNeeded > 1 ? 's' : ''} per node)`;
+                    }
+                }
+            }
+            
+            // Storage cost (storage * price per GB * region multiplier)
+            const storageCost = selectedStorage * storagePricePerGB * selectedRegionMultiplier;
+            
+            // Backup cost is fixed based on selection
+            const backupCost = selectedBackupPrice * selectedRegionMultiplier;
+            
+            // Network cost
+            const networkCost = selectedNetworkPrice * selectedRegionMultiplier;
+            
+            // Security cost
+            const securityCost = selectedSecurityPrice * selectedRegionMultiplier;
+            
+            // Calculate subtotal before support
+            const subtotal = computeSubtotal + databaseSubtotal + storageCost + backupCost + networkCost + securityCost;
+            
+            // Support cost (percentage of subtotal)
+            const supportCost = subtotal * (selectedSupportPercent / 100);
+            
+            // Total cost (now the same as what we'll display as "Estimated Monthly Cost")
+            const totalCost = subtotal + supportCost;
+            
+            // Update the display - NOW "Estimated Monthly Cost" SHOWS THE FINAL TOTAL
+            totalPriceEl.textContent = `$${totalCost.toFixed(2)}`;
+            
+            // Update the breakdown sections
+            nodeSizeCostEl.textContent = `$${nodeCost.toFixed(2)}`;
+            nodesCountEl.textContent = `${selectedNodes} × $${(nodeCost * selectedRegionMultiplier).toFixed(2)}`;
+            if (selectedOs === 'ubuntu') {
+                osCostEl.textContent = 'Free';
+            } else {
+                const totalOsCost = osCost * selectedRegionMultiplier;
+                osCostEl.textContent = `$${totalOsCost.toFixed(2)} (${osLicenses} license${osLicenses > 1 ? 's' : ''} × $${selectedOsPrice})`;
+            }
+            
+            databaseCostEl.textContent = versionPricing ? `$${databaseSubtotal.toFixed(2)}` : '$0.00';
+            versionCostEl.textContent = versionPricing ? 
+                (byolSelected ? "Enterprise (BYOL)" : selectedVersion.charAt(0).toUpperCase() + selectedVersion.slice(1)) : 
+                "Not Available";
+            licenseDetailsEl.textContent = licenseDetails || "Not Available";
+            databaseSubtotalEl.textContent = versionPricing ? `$${databaseSubtotal.toFixed(2)}` : '$0.00';
+            
+            storageCostEl.textContent = `$${storageCost.toFixed(2)}`;
+            backupCostEl.textContent = `$${backupCost.toFixed(2)}`;
+            networkCostEl.textContent = `$${networkCost.toFixed(2)}`;
+            securityCostEl.textContent = `$${securityCost.toFixed(2)}`;
+            supportCostEl.textContent = selectedSupportPercent > 0 ? `$${supportCost.toFixed(2)}` : 'Included';
+            regionCostEl.textContent = selectedRegionName;
+            
+            // Update storage label
+            storageCostEl.previousElementSibling.textContent = `Storage (${selectedStorage}GB)`;
+            
+            // Display final total (same as estimated monthly cost now)
+            finalPriceEl.textContent = `$${totalCost.toFixed(2)}`;
+        }
+        
+        // Initialize calculator
+        calculatePrice();
+        
+        // Initialize database type selection
+        databaseTypeOptions[0].click(); // Select Relational by default
+    </script>
+</body>
+</html>

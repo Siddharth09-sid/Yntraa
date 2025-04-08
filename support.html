@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .support-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .support-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .support-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .support-card-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(74, 107, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .support-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .support-card-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .support-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .support-card-link i {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+        
+        .support-card-link:hover i {
+            transform: translateX(3px);
+        }
+        
+        .ticket-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+        
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .ticket-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .ticket-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .ticket-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background-color: var(--bg-light);
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .ticket-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .ticket-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .ticket-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .ticket-id {
+            font-family: monospace;
+            color: var(--primary);
+        }
+        
+        .ticket-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .ticket-status.open {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .ticket-status.pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .ticket-status.closed {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--text-light);
+        }
+        
+        .ticket-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .ticket-actions .btn {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .contact-form {
+            padding: 2rem;
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        
+        .form-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background-color: white;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+            .support-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li>
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li >
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li class="active">
+                <a href="./support.html" style="color: #283e81;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Support</a>
+                <span class="separator">/</span>
+                <span>Help Center</span>
+            </div>
+            <h1 class="page-title">Support Center</h1>
+        </div>
+        
+        <div class="support-container">
+            <!-- Help Card -->
+            <div class="support-card">
+                <div class="support-card-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h3 class="support-card-title">Help Center</h3>
+                <p class="support-card-description">
+                    Browse our extensive knowledge base for answers to common questions and troubleshooting guides.
+                </p>
+                <a href="#" class="support-card-link">
+                    Visit Help Center <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Documentation Card -->
+            <div class="support-card">
+                <div class="support-card-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="support-card-title">Documentation</h3>
+                <p class="support-card-description">
+                    Access comprehensive technical documentation, API references, and developer guides.
+                </p>
+                <a href="#" class="support-card-link">
+                    View Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Community Card -->
+            <div class="support-card">
+                <div class="support-card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="support-card-title">Community Forum</h3>
+                <p class="support-card-description">
+                    Connect with other Yntraa Cloud users, ask questions, and share solutions.
+                </p>
+                <a href="#" class="support-card-link">
+                    Join Community <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Contact Card -->
+            <div class="support-card">
+                <div class="support-card-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3 class="support-card-title">Contact Support</h3>
+                <p class="support-card-description">
+                    Submit a ticket to our support team for personalized assistance with your issues.
+                </p>
+                <a href="#" class="support-card-link" id="showContactForm">
+                    Contact Us <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Contact Form (initially hidden) -->
+        <div class="contact-form hidden" id="contactForm">
+            <h3 class="form-title">Contact Support</h3>
+            <form id="supportForm">
+                <div class="form-group">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" id="subject" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="issueType" class="form-label">Issue Type</label>
+                    <select id="issueType" class="form-select" required>
+                        <option value="">Select issue type</option>
+                        <option value="technical">Technical Issue</option>
+                        <option value="billing">Billing Question</option>
+                        <option value="account">Account Help</option>
+                        <option value="feature">Feature Request</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="urgency" class="form-label">Urgency</label>
+                    <select id="urgency" class="form-select" required>
+                        <option value="low">Low - General question</option>
+                        <option value="medium" selected>Medium - System impaired</option>
+                        <option value="high">High - Production system down</option>
+                        <option value="critical">Critical - Business-critical outage</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="attachments" class="form-label">Attachments (optional)</label>
+                    <input type="file" id="attachments" class="form-control" multiple>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancelContact">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Submit Ticket
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Recent Tickets -->
+        <div class="ticket-container">
+            <div class="ticket-header">
+                <h3 class="ticket-title">Your Recent Support Tickets</h3>
+                <button class="btn btn-outline">
+                    <i class="fas fa-plus"></i> New Ticket
+                </button>
+            </div>
+            
+            <table class="ticket-table">
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ticket-id">#TCK-2023-06-125</td>
+                        <td>VM performance issues</td>
+                        <td><span class="ticket-status open">Open</span></td>
+                        <td>2 days ago</td>
+                        <td>
+                            <div class="ticket-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-comment"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticket-id">#TCK-2023-06-098</td>
+                        <td>Billing discrepancy</td>
+                        <td><span class="ticket-status pending">Pending</span></td>
+                        <td>1 week ago</td>
+                        <td>
+                            <div class="ticket-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-comment"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticket-id">#TCK-2023-05-156</td>
+                        <td>Database connection timeout</td>
+                        <td><span class="ticket-status closed">Closed</span></td>
+                        <td>3 weeks ago</td>
+                        <td>
+                            <div class="ticket-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-comment"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show/hide contact form
+            const showContactForm = document.getElementById('showContactForm');
+            const contactForm = document.getElementById('contactForm');
+            const cancelContact = document.getElementById('cancelContact');
+            
+            showContactForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                contactForm.classList.remove('hidden');
+                // Scroll to the form
+                contactForm.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            cancelContact.addEventListener('click', function() {
+                contactForm.classList.add('hidden');
+            });
+            
+            // Form submission
+            const supportForm = document.getElementById('supportForm');
+            
+            supportForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const subject = document.getElementById('subject').value;
+                const issueType = document.getElementById('issueType').value;
+                const description = document.getElementById('description').value;
+                const urgency = document.getElementById('urgency').value;
+                
+                // In a real app, this would submit to a backend
+                alert(`Support ticket submitted!\nSubject: ${subject}\nIssue Type: ${issueType}\nUrgency: ${urgency}`);
+                
+                // Reset form
+                supportForm.reset();
+                contactForm.classList.add('hidden');
+                
+                // Show success message (in a real app)
+                // You might add a toast notification here
+            });
+            
+            // Ticket actions
+            document.querySelectorAll('.ticket-actions .btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const ticketId = this.closest('tr').querySelector('.ticket-id').textContent;
+                    const action = this.querySelector('i').className;
+                    
+                    if (action.includes('eye')) {
+                        alert(`Viewing ticket ${ticketId}`);
+                    } else if (action.includes('comment')) {
+                        alert(`Adding comment to ticket ${ticketId}`);
+                    }
+                });
+            });
+            
+            // New ticket button
+            document.querySelector('.ticket-header button').addEventListener('click', function() {
+                contactForm.classList.remove('hidden');
+                contactForm.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
