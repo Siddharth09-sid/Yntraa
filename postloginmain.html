@@ -324,6 +324,11 @@
             <li>
                <a href="./support.html" style="color: black;text-decoration: none;"> <i class="fas fa-headset"></i> Support</a>
             </li>
+            <li>
+                <a href="./deployments.html" style="color: black;text-decoration: none;">
+                    <i class="fas fa-cloud"></i> My Deployments
+                </a>
+            </li>
         </ul>
     </div>
     
@@ -394,38 +399,44 @@
                 icon: 'fa-database',
                 title: 'Database',
                 description: 'Managed database services including MySQL, PostgreSQL, MongoDB and more',
-                category: 'database'
+                category: 'database',
+                url: 'postlogindatabase3.html'
                 
             },
             {
                 icon: 'fa-server',
                 title: 'Compute',
                 description: 'Virtual machines, containers, and serverless computing options',
-                category: 'compute'
+                category: 'compute',
+                url:'postlogincompute.html'
             },
             {
                 icon: 'fa-hdd',
                 title: 'Storage',
                 description: 'Block, object, and file storage solutions for all your needs',
-                category: 'storage'
+                category: 'storage',
+                url:'postloginstorage.html'
             },
             {
                 icon: 'fa-network-wired',
                 title: 'Network',
                 description: 'Load balancers, DNS, CDN, and private networking',
-                category: 'network'
+                category: 'network',
+                url:'postloginnetwork.html'
             },
             {
                 icon: 'fa-shield-alt',
                 title: 'Security',
                 description: 'Firewalls, IAM, encryption, and compliance tools',
-                category: 'security'
+                category: 'security',
+                url:'postloginsecurity.html'
             },
             {
                 icon: 'fa-store',
                 title: 'Marketplace',
                 description: 'Pre-configured applications and development stacks',
-                category: 'marketplace'
+                category: 'marketplace',
+                url:'marketplace.html'
             }
         ];
 
@@ -442,7 +453,7 @@
                 <p>${service.description}</p>
             `;
             card.addEventListener('click', () => {
-                navigateToService(service.category);
+                window.location.href = service.url ;
             });
             servicesGrid.appendChild(card);
         });

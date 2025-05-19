@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Deployments - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Add to your existing styles */
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .creation-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        
+        .step {
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 20px;
+            height: 1px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+            z-index: 2;
+        }
+        
+        .step.completed {
+            background-color: #e8f0fe;
+            color: var(--primary);
+            z-index: 2;
+        }
+        
+        .step.inactive {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .form-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-header i {
+            color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 200px;
+            flex: 1;
+        }
+        
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .radio-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-top: 0.2rem;
+        }
+        
+        .radio-option-content {
+            flex: 1;
+        }
+        
+        .radio-option-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .radio-option-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .summary-label {
+            color: var(--text-light);
+        }
+        
+        .summary-value {
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .total-cost {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .sku-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .sku-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .sku-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .sku-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .sku-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .review-section {
+            margin-bottom: 2rem;
+        }
+        
+        .review-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .review-section h3 i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .review-details {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .review-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-label {
+            width: 150px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .review-value {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .deploy-status {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .deploy-status i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .deploy-status h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .deploy-status p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 0.5s;
+        }
+        
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-toggle:hover {
+            border-color: var(--primary);
+        }
+        
+        .feature-toggle.active {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .feature-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .feature-name {
+            font-weight: 500;
+        }
+        
+        .feature-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .feature-price {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+        }
+        .deployments-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        
+        .deployments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .deployments-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .deployments-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .deployments-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .deployments-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .status-running {
+            color: var(--success);
+        }
+        
+        .status-stopped {
+            color: var(--warning);
+        }
+        
+        .status-error {
+            color: var(--danger);
+        }
+        
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-right: 0.25rem;
+        }
+        
+        .btn-start {
+            background-color: var(--success);
+            color: white;
+            border: 1px solid var(--success);
+        }
+        
+        .btn-stop {
+            background-color: var(--warning);
+            color: white;
+            border: 1px solid var(--warning);
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
+            border: 1px solid var(--danger);
+        }
+        
+        .btn-manage {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border);
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Keep your existing navbar and sidebar structure -->
+    <nav class="navbar">
+        <div class="logo-container">
+<a href="./yntraa final1.html">
+    <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+            <span class="logo-text"></span>
+        </div>
+    </a>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li>
+                <a href="./postloginmain.html" style="color: black;text-decoration: none;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li >
+                <a href="./postlogincompute.html" style="color: black;text-decoration: none;"><i class="fas fa-server"></i> Compute</a>
+            </li>
+            <li>
+                <a href="./postloginstorage.html" style="color: black;text-decoration: none;"><i class="fas fa-hdd"></i> Storage</a>
+            </li>
+            <li>
+               <a href="./postloginnetwork.html" style="color: black;text-decoration: none;"> <i class="fas fa-network-wired"></i> Network</a>
+            </li>
+            <li >
+                <a href="./postlogindatabase3.html" style="color: black;text-decoration: none;"><i class="fas fa-database"></i> Database</a>
+            </li>
+            <li>
+                <a href="./postloginsecurity.html" style="color: black;text-decoration: none;"><i class="fas fa-shield-alt"></i> Security</a>
+            </li>
+            <li >
+                <a href="./marketplace.html" style="color: black;text-decoration: none;"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+                <a href="./postloginmonitoring.html" style="color: black;text-decoration: none;"> <i class="fas fa-chart-line"></i> Monitoring</a>
+            </li>
+            <li >
+                <a href="./billing.html" style="color: black;text-decoration: none;"><i class="fas fa-credit-card"></i> Billing</a>
+            </li>
+            <li>
+                <a href="./documentation.html" style="color: black;text-decoration: none;"><i class="fas fa-book"></i> Documentation</a>
+            </li>
+            <li>
+                <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
+            </li>
+            <li class="active">
+                <a href="./deployments.html" style="color: #283e81;text-decoration: none;">
+                    <i class="fas fa-cloud"></i> My Deployments
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="page-header">
+            <div class="breadcrumb">
+                <a href="#">Deployments</a>
+            </div>
+            <h1 class="page-title">My Deployments</h1>
+            <button class="btn btn-primary" id="newDeploymentBtn">
+                <i class="fas fa-plus"></i> New Deployment
+            </button>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label for="filterType">Type</label>
+                <select id="filterType">
+                    <option value="all">All Types</option>
+                    <option value="database">Database</option>
+                    <option value="compute">Compute</option>
+                    <option value="storage">Storage</option>
+                    <option value="network">Network</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterStatus">Status</label>
+                <select id="filterStatus">
+                    <option value="all">All Statuses</option>
+                    <option value="running">Running</option>
+                    <option value="stopped">Stopped</option>
+                    <option value="error">Error</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterRegion">Region</label>
+                <select id="filterRegion">
+                    <option value="">Select Region</option>
+                            <option value="us-east-1">Mumbai (NM1)</option>
+                            <option value="us-west-1">Delhi (D1)</option>
+                            <option value="eu-central-1">Gujrat (G1)</option>
+                            <!-- <option value="ap-south-1">Asia Pacific (Mumbai)</option> -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="deployments-container">
+            <table class="deployments-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Service</th>
+                        <th>Region</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Cost</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="deploymentsTableBody">
+                    <!-- Deployments will be populated here -->
+                </tbody>
+            </table>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="fas fa-cloud"></i>
+                <h3>No deployments found</h3>
+                <p>You haven't deployed any services yet. Click "New Deployment" to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add this debug code at the start of your script
+console.log("Checking localStorage for deployments...");
+const storedDeployments = localStorage.getItem('yntraaDeployments');
+console.log("Raw localStorage data:", storedDeployments);
+try {
+    const parsed = JSON.parse(storedDeployments || '[]');
+    console.log("Parsed deployments:", parsed);
+} catch (e) {
+    console.error("Error parsing deployments:", e);
+}
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load deployments from localStorage
+            const deployments = JSON.parse(localStorage.getItem('yntraaDeployments') || '[]');
+            const tableBody = document.getElementById('deploymentsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            // New deployment button
+            document.getElementById('newDeploymentBtn').addEventListener('click', function() {
+                window.location.href = 'postlogindatabase3.html';
+            });
+            
+            // Filter elements
+            const filterType = document.getElementById('filterType');
+            const filterStatus = document.getElementById('filterStatus');
+            const filterRegion = document.getElementById('filterRegion');
+            
+            // Add event listeners to filters
+            [filterType, filterStatus, filterRegion].forEach(filter => {
+                filter.addEventListener('change', renderDeployments);
+            });
+            
+            // Initial render
+            renderDeployments();
+            
+            function renderDeployments() {
+    const tableBody = document.getElementById('deploymentsTableBody');
+    const emptyState = document.getElementById('emptyState');
+    
+    // Safely get deployments
+    let deployments = [];
+    try {
+        const stored = localStorage.getItem('yntraaDeployments');
+        if (stored) deployments = JSON.parse(stored);
+    } catch (e) {
+        console.error('Failed to load deployments:', e);
+    }
+    
+    // Clear existing rows
+    tableBody.innerHTML = '';
+    
+    if (!Array.isArray(deployments)) {
+        console.error('Deployments is not an array:', deployments);
+        deployments = [];
+    }
+    
+    // Apply filters
+    const filtered = deployments.filter(d => {
+        // Add your filter logic here
+        return true;
+    });
+    
+    if (filtered.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    
+    // Render each deployment
+    filtered.forEach(d => {
+        const row = document.createElement('tr');
+        
+        // Safely access properties with defaults
+        const name = d.name || 'Unnamed';
+        const type = d.type || 'unknown';
+        const status = d.status || 'unknown';
+        
+        row.innerHTML = `
+            <td>${name}</td>
+            <td>${type}</td>
+            <td>${getServiceName(d)}</td>
+            <td>${getRegionName(d.region)}</td>
+            <td class="status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</td>
+            <td>${formatDate(d.createdAt)}</td>
+            <td>${d.cost || '$0.00'}</td>
+            <td>${renderActions(d.id, status)}</td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+                
+                // Add event listeners to action buttons
+                document.querySelectorAll('.btn-start').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        startDeployment(this.getAttribute('data-id'));
+                    });
+                });
+                
+                document.querySelectorAll('.btn-stop').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        stopDeployment(this.getAttribute('data-id'));
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        deleteDeployment(this.getAttribute('data-id'));
+                    });
+                });
+                
+                document.querySelectorAll('.btn-manage').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        manageDeployment(this.getAttribute('data-id'));
+                    });
+                });
+            }
+            // Helper functions
+function getServiceName(deployment) {
+    if (deployment.type === 'database') {
+        return `${deployment.engine || 'DB'} ${deployment.version || ''}`.trim();
+    }
+    return deployment.type.charAt(0).toUpperCase() + deployment.type.slice(1);
+}
+
+function formatDate(isoString) {
+    try {
+        const d = new Date(isoString);
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+    } catch {
+        return 'Unknown';
+    }
+}
+
+function renderActions(id, status) {
+    let buttons = '';
+    if (status === 'running') {
+        buttons += `<button class="action-btn btn-stop" data-id="${id}"><i class="fas fa-stop"></i> Stop</button>`;
+    } else {
+        buttons += `<button class="action-btn btn-start" data-id="${id}"><i class="fas fa-play"></i> Start</button>`;
+    }
+    buttons += `
+        <button class="action-btn btn-manage" data-id="${id}"><i class="fas fa-cog"></i> Manage</button>
+        <button class="action-btn btn-delete" data-id="${id}"><i class="fas fa-trash"></i> Delete</button>
+    `;
+    return buttons;
+}
+            function getRegionName(regionCode) {
+                const regions = {
+                    'us-east-1': 'Mumbai (NM1)',
+        'us-west-1': 'Delhi (D1)',
+        'eu-central-1': 'Gujrat (G1)',
+        'ap-south-1': 'Asia Pacific (Mumbai)'
+                };
+                return regions[regionCode] || regionCode;
+            }
+            
+            function startDeployment(id) {
+                const deployment = deployments.find(d => d.id === id);
+                if (deployment) {
+                    deployment.status = 'running';
+                    localStorage.setItem('yntraaDeployments', JSON.stringify(deployments));
+                    renderDeployments();
+                    alert(`Deployment ${id} started successfully`);
+                }
+            }
+            
+            function stopDeployment(id) {
+                const deployment = deployments.find(d => d.id === id);
+                if (deployment) {
+                    deployment.status = 'stopped';
+                    localStorage.setItem('yntraaDeployments', JSON.stringify(deployments));
+                    renderDeployments();
+                    alert(`Deployment ${id} stopped successfully`);
+                }
+            }
+            
+            function deleteDeployment(id) {
+                if (confirm('Are you sure you want to delete this deployment? This action cannot be undone.')) {
+                    const index = deployments.findIndex(d => d.id === id);
+                    if (index !== -1) {
+                        deployments.splice(index, 1);
+                        localStorage.setItem('yntraaDeployments', JSON.stringify(deployments));
+                        renderDeployments();
+                        alert(`Deployment ${id} deleted successfully`);
+                    }
+                }
+            }
+            
+            function manageDeployment(id) {
+                // In a real app, this would navigate to a detailed management page
+                alert(`Navigating to management page for deployment ${id}`);
+                // window.location.href = `manage.html?id=${id}`;
+            }
+            // Add this to your deployments.html to debug:
+            console.log('Stored deployments:', JSON.parse(localStorage.getItem('yntraaDeployments')));
+
+            document.addEventListener('DOMContentLoaded', function() {
+    // Debug: Check what's in localStorage
+    const storedData = localStorage.getItem('yntraaDeployments');
+    console.log('Raw localStorage data:', storedData);
+    
+    try {
+        const deployments = JSON.parse(storedData || '[]');
+        console.log('Parsed deployments:', deployments);
+        // Rest of your code...
+    } catch (e) {
+        console.error('Error parsing deployments:', e);
+        localStorage.setItem('yntraaDeployments', '[]');
+    }
+});
+        });
+    </script>
+</body>
+</html>

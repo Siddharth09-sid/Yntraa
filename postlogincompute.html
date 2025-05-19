@@ -585,8 +585,10 @@
 <body>
     <nav class="navbar">
         <div class="logo-container">
+            <a href="./yntraacompute.html">
             <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
             <span class="logo-text"></span>
+        </a>
         </div>
         <div class="user-menu">
             <button class="btn btn-outline">
@@ -636,6 +638,11 @@
             <li>
                 <a href="./support.html" style="color: black;text-decoration: none;"><i class="fas fa-headset"></i> Support</a>
             </li>
+            <li>
+                <a href="./deployments.html" style="color: black;text-decoration: none;">
+                    <i class="fas fa-cloud"></i> My Deployments
+                </a>
+            </li>   
         </ul>
     </div>
     
@@ -674,10 +681,10 @@
                         <label for="region">Region</label>
                         <select id="region">
                             <option value="">Select Region</option>
-                            <option value="us-east-1">US East (N. Virginia)</option>
-                            <option value="us-west-1">US West (N. California)</option>
-                            <option value="eu-central-1">Europe (Frankfurt)</option>
-                            <option value="ap-south-1">Asia Pacific (Mumbai)</option>
+                            <option value="us-east-1">Mumbai (NM1)</option>
+                            <option value="us-west-1">Delhi (D1)</option>
+                            <option value="eu-central-1">Gujrat (G1)</option>
+                            <!-- <option value="ap-south-1">Asia Pacific (Mumbai)</option> -->
                         </select>
                         <p class="form-hint">Choose a region closest to your users for better performance</p>
                     </div>
@@ -1129,12 +1136,36 @@
                     </div>
                 </div>
                 
+                <div class="deploy-status" id="deployComplete" style="display: none;">
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    <h2>Deployment Complete!</h2>
+                    <p>Your compute instance has been successfully deployed and is now ready to use.</p>
+                    
+                    <div class="review-details">
+                        <div class="review-row">
+                            <div class="review-label">Compute Name:</div>
+                            <div class="review-value" id="complete-db-name">production-db</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Endpoint:</div>
+                            <div class="review-value" id="complete-endpoint">db-prod-1234.yntraa.cloud:3306</div>
+                        </div>
+                        <div class="review-row">
+                            <div class="review-label">Status:</div>
+                            <div class="review-value" id="complete-status"><span style="color: var(--success);">Running</span></div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="action-buttons" style="justify-content: center;">
-                    <button class="btn btn-outline">
+                    <button class="btn btn-outline" id="viewLogsBtn">
                         <i class="fas fa-external-link-alt"></i> View Deployment Logs
                     </button>
                     <button class="btn btn-primary" id="dashboardBtn">
                         <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </button>
+                    <button class="btn btn-primary" id="manageBtn" style="display: none;">
+                        <i class="fas fa-cog"></i> Manage Instance
                     </button>
                 </div>
             </div>
@@ -1545,7 +1576,26 @@
             document.querySelectorAll('#instance-type, #instance-size, #os, #instances, #storage-size, #storage-type, #network, #security-group, input[name="support"]').forEach(element => {
                 element.addEventListener('change', updateCostSummary);
             });
-            
+            function simulateDeployment() {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            // Update UI for completed deployment
+                            document.querySelector('.deploy-status i').className = 'fas fa-check-circle';
+                            document.querySelector('.deploy-status h2').textContent = 'Deployment Complete!';
+                            document.querySelector('.deploy-status p').textContent = 
+                                'Your monitoring solution has been successfully deployed and is now active.';
+                            viewDashboardBtn.style.display = 'block';
+                        }, 500);
+                    }
+                }, 500);
+            }
             // Initial setup
             updateInstanceSizesAndSKUs();
             updateCostSummary();
