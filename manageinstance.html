@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Instance - Yntraa Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Include all your existing styles from deployments.html */
+        /* Add to your existing styles */
+        :root {
+            --primary: #283e81;
+            --primary-dark: #F29F43;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border: #e1e4e8;
+            --text-light: #6c757d;
+            --bg-light: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #212529;
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+            border-color: #d3d9df;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .sidebar {
+            width: 220px;
+            background-color: var(--light);
+            height: calc(100vh - 60px);
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            top: 60px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(74, 107, 255, 0.1);
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .sidebar-menu li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 220px;
+            padding: 2rem;
+            padding-top: 80px;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            width: 100%;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .breadcrumb .separator {
+            opacity: 0.6;
+        }
+        
+        .creation-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+        
+        .step {
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 20px;
+            height: 1px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+            z-index: 2;
+        }
+        
+        .step.completed {
+            background-color: #e8f0fe;
+            color: var(--primary);
+            z-index: 2;
+        }
+        
+        .step.inactive {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .form-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-header i {
+            color: var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 0.7rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.15s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 200px;
+            flex: 1;
+        }
+        
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .radio-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin-top: 0.2rem;
+        }
+        
+        .radio-option-content {
+            flex: 1;
+        }
+        
+        .radio-option-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .radio-option-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .summary-label {
+            color: var(--text-light);
+        }
+        
+        .summary-value {
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .total-cost {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .sku-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .sku-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .sku-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .sku-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .sku-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .review-section {
+            margin-bottom: 2rem;
+        }
+        
+        .review-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .review-section h3 i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .review-details {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .review-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-label {
+            width: 150px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .review-value {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .deploy-status {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .deploy-status i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .deploy-status h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .deploy-status p {
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0;
+            transition: width 0.5s;
+        }
+        
+        .feature-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-toggle:hover {
+            border-color: var(--primary);
+        }
+        
+        .feature-toggle.active {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .feature-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .feature-name {
+            font-weight: 500;
+        }
+        
+        .feature-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .feature-price {
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 900;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+        }
+        .deployments-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+        
+        .deployments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .deployments-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        
+        .deployments-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+        
+        .deployments-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .deployments-table tr:hover {
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+        
+        .status-running {
+            color: var(--success);
+        }
+        
+        .status-stopped {
+            color: var(--warning);
+        }
+        
+        .status-error {
+            color: var(--danger);
+        }
+        
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-right: 0.25rem;
+        }
+        
+        .btn-start {
+            background-color: var(--success);
+            color: white;
+            border: 1px solid var(--success);
+        }
+        
+        .btn-stop {
+            background-color: var(--warning);
+            color: white;
+            border: 1px solid var(--warning);
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
+            border: 1px solid var(--danger);
+        }
+        
+        .btn-manage {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border);
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        /* Additional styles for management page */
+        .instance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .instance-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .instance-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .status-running {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-stopped {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .instance-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .instance-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .instance-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .instance-tab:hover:not(.active) {
+            border-bottom-color: var(--border);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .instance-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .detail-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+        }
+        
+        .detail-card h3 {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-label {
+            width: 120px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+        }
+        
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-title {
+            font-size: 1rem;
+            margin: 0;
+            color: var(--dark);
+        }
+        
+        .metric-chart {
+            height: 200px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="./yntraa final1.html">
+                <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" class="logo">
+                <span class="logo-text"></span>
+            </a>
+        </div>
+        <div class="user-menu">
+            <button class="btn btn-outline">
+                <i class="fas fa-question-circle"></i> Help
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-user"></i> Account
+            </button>
+        </div>
+    </nav>
+    
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <!-- Keep your existing sidebar menu items -->
+            <li>
+                <a href="./deployments.html" style="color: black;text-decoration: none;">
+                    <i class="fas fa-arrow-left"></i> Back to Deployments
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main-content">
+        <div class="instance-header">
+            <div>
+                <h1 class="instance-title" id="instanceName">Loading...</h1>
+                <div class="breadcrumb">
+                    <a href="./deployments.html">Deployments</a>
+                    <span class="separator">/</span>
+                    <span id="instanceType">Database</span>
+                    <span class="separator">/</span>
+                    <span id="instanceId">Loading...</span>
+                </div>
+            </div>
+            <div class="instance-status" id="instanceStatus">Loading...</div>
+        </div>
+        
+        <div class="instance-tabs">
+            <div class="instance-tab active" data-tab="overview">Overview</div>
+            <div class="instance-tab" data-tab="monitoring">Monitoring</div>
+            <div class="instance-tab" data-tab="configuration">Configuration</div>
+            <div class="instance-tab" data-tab="backups">Backups</div>
+            <div class="instance-tab" data-tab="logs">Logs</div>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overview-tab">
+            <div class="instance-details">
+                <div class="detail-card">
+                    <h3>Basic Information</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Instance ID:</span>
+                        <span class="detail-value" id="detail-id">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Type:</span>
+                        <span class="detail-value" id="detail-type">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Engine:</span>
+                        <span class="detail-value" id="detail-engine">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Version:</span>
+                        <span class="detail-value" id="detail-version">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Created:</span>
+                        <span class="detail-value" id="detail-created">-</span>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>Connection Details</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Endpoint:</span>
+                        <span class="detail-value" id="detail-endpoint">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Port:</span>
+                        <span class="detail-value">3306</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Region:</span>
+                        <span class="detail-value" id="detail-region">-</span>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>Resource Configuration</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Plan:</span>
+                        <span class="detail-value" id="detail-plan">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Node Size:</span>
+                        <span class="detail-value" id="detail-node-size">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Nodes:</span>
+                        <span class="detail-value" id="detail-nodes">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Storage:</span>
+                        <span class="detail-value" id="detail-storage">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="startStopBtn">
+                    <i class="fas fa-power-off"></i> Stop Instance
+                </button>
+                <button class="btn btn-outline" id="restartBtn">
+                    <i class="fas fa-sync-alt"></i> Restart
+                </button>
+                <button class="btn btn-outline" id="connectBtn">
+                    <i class="fas fa-plug"></i> Connect
+                </button>
+            </div>
+        </div>
+        
+        <!-- Monitoring Tab -->
+        <div class="tab-content" id="monitoring-tab">
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3 class="metric-title">CPU Utilization</h3>
+                        <span>Last 1 hour</span>
+                    </div>
+                    <div class="metric-chart">
+                        [CPU Utilization Chart]
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Current:</span>
+                        <span class="detail-value" id="cpu-current">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Average:</span>
+                        <span class="detail-value" id="cpu-avg">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Max:</span>
+                        <span class="detail-value" id="cpu-max">-</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3 class="metric-title">Memory Usage</h3>
+                        <span>Last 1 hour</span>
+                    </div>
+                    <div class="metric-chart">
+                        [Memory Usage Chart]
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Current:</span>
+                        <span class="detail-value" id="memory-current">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Usage:</span>
+                        <span class="detail-value" id="memory-usage">-</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3 class="metric-title">Storage Performance</h3>
+                        <span>Last 1 hour</span>
+                    </div>
+                    <div class="metric-chart">
+                        [Storage Performance Chart]
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">IOPS:</span>
+                        <span class="detail-value" id="iops-current">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Throughput:</span>
+                        <span class="detail-value" id="throughput-current">-</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3 class="metric-title">Network Activity</h3>
+                        <span>Last 1 hour</span>
+                    </div>
+                    <div class="metric-chart">
+                        [Network Activity Chart]
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">In:</span>
+                        <span class="detail-value" id="network-in">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Out:</span>
+                        <span class="detail-value" id="network-out">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Configuration Tab -->
+        <div class="tab-content" id="configuration-tab">
+            <div class="form-container">
+                <div class="form-section">
+                    <h2 class="section-header">
+                        <i class="fas fa-cog"></i> Instance Configuration
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="config-name">Instance Name</label>
+                            <input type="text" id="config-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="config-plan">Plan</label>
+                            <select id="config-plan" disabled>
+                                <option value="">Select Plan</option>
+                            </select>
+                            <p class="form-hint">Changing plan requires instance restart</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-header">
+                        <i class="fas fa-hdd"></i> Storage Configuration
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="config-storage-size">Storage Size (GB)</label>
+                            <input type="number" id="config-storage-size" min="10" max="10000">
+                        </div>
+                        <div class="form-group">
+                            <label>Storage Type</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="storage-type" value="ssd" checked>
+                                    <div class="radio-option-content">
+                                        <div class="radio-option-title">SSD</div>
+                                        <div class="radio-option-description">High performance storage</div>
+                                    </div>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="storage-type" value="nvme">
+                                    <div class="radio-option-content">
+                                        <div class="radio-option-title">NVMe</div>
+                                        <div class="radio-option-description">Ultra high performance</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn btn-primary" id="saveConfigBtn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Backups Tab -->
+        <div class="tab-content" id="backups-tab">
+            <div class="form-container">
+                <div class="form-section">
+                    <h2 class="section-header">
+                        <i class="fas fa-database"></i> Backup Configuration
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="backup-policy">Backup Policy</label>
+                            <select id="backup-policy">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="none">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="backup-retention">Retention Period (days)</label>
+                            <input type="number" id="backup-retention" min="1" max="35" value="7">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="section-header">
+                        <i class="fas fa-history"></i> Manual Backups
+                    </h2>
+                    <button class="btn btn-primary" id="createBackupBtn">
+                        <i class="fas fa-plus"></i> Create Backup Now
+                    </button>
+                    
+                    <table class="deployments-table" style="margin-top: 1.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Backup Name</th>
+                                <th>Created</th>
+                                <th>Size</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="backupsTableBody">
+                            <tr>
+                                <td colspan="5">No backups available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logs Tab -->
+        <div class="tab-content" id="logs-tab">
+            <div class="form-container">
+                <div class="form-section">
+                    <h2 class="section-header">
+                        <i class="fas fa-terminal"></i> Instance Logs
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="log-type">Log Type</label>
+                            <select id="log-type">
+                                <option value="error">Error Logs</option>
+                                <option value="slow">Slow Query Logs</option>
+                                <option value="general">General Logs</option>
+                                <option value="audit">Audit Logs</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="log-time">Time Range</label>
+                            <select id="log-time">
+                                <option value="1h">Last 1 hour</option>
+                                <option value="6h">Last 6 hours</option>
+                                <option value="24h">Last 24 hours</option>
+                                <option value="7d">Last 7 days</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="log-viewer">
+                        <pre id="log-content">Loading logs...</pre>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get instance ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const instanceId = urlParams.get('id');
+            
+            if (!instanceId) {
+                alert('No instance ID specified');
+                window.location.href = 'deployments.html';
+                return;
+            }
+            
+            // Load instance data
+            loadInstanceData(instanceId);
+            
+            // Tab switching
+            document.querySelectorAll('.instance-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.instance-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Start/Stop button
+            document.getElementById('startStopBtn').addEventListener('click', function() {
+                toggleInstanceStatus(instanceId);
+            });
+        });
+        
+        function loadInstanceData(instanceId) {
+            // Load from localStorage
+            const deployments = JSON.parse(localStorage.getItem('yntraaDeployments') || '[]');
+            const instance = deployments.find(d => d.id === instanceId);
+            
+            if (!instance) {
+                alert('Instance not found');
+                window.location.href = 'deployments.html';
+                return;
+            }
+            
+            // Update UI with instance data
+            document.getElementById('instanceName').textContent = instance.name;
+            document.getElementById('instanceId').textContent = instanceId;
+            document.getElementById('instanceType').textContent = instance.type.charAt(0).toUpperCase() + instance.type.slice(1);
+            
+            // Set status
+            const statusElement = document.getElementById('instanceStatus');
+            statusElement.textContent = instance.status.charAt(0).toUpperCase() + instance.status.slice(1);
+            statusElement.className = `instance-status status-${instance.status}`;
+            
+            // Update start/stop button
+            const startStopBtn = document.getElementById('startStopBtn');
+            if (instance.status === 'running') {
+                startStopBtn.innerHTML = '<i class="fas fa-power-off"></i> Stop Instance';
+                startStopBtn.className = 'btn btn-primary';
+            } else {
+                startStopBtn.innerHTML = '<i class="fas fa-power-off"></i> Start Instance';
+                startStopBtn.className = 'btn btn-success';
+            }
+            
+            // Update details
+            document.getElementById('detail-id').textContent = instanceId;
+            document.getElementById('detail-type').textContent = instance.type;
+            document.getElementById('detail-engine').textContent = instance.engine;
+            document.getElementById('detail-version').textContent = instance.version;
+            document.getElementById('detail-created').textContent = formatDate(instance.createdAt);
+            document.getElementById('detail-endpoint').textContent = instance.endpoint;
+            document.getElementById('detail-region').textContent = getRegionName(instance.region);
+            document.getElementById('detail-plan').textContent = instance.plan;
+            document.getElementById('detail-node-size').textContent = instance.nodeSize;
+            document.getElementById('detail-nodes').textContent = instance.nodes;
+            document.getElementById('detail-storage').textContent = `${instance.storageSize}GB ${instance.storageType.toUpperCase()}`;
+            
+            // Configuration form
+            document.getElementById('config-name').value = instance.name;
+            document.getElementById('config-storage-size').value = instance.storageSize;
+            document.querySelector(`input[name="storage-type"][value="${instance.storageType}"]`).checked = true;
+            
+            // Generate some random metrics for demo
+            document.getElementById('cpu-current').textContent = `${Math.floor(Math.random() * 30) + 5}%`;
+            document.getElementById('cpu-avg').textContent = `${Math.floor(Math.random() * 25) + 10}%`;
+            document.getElementById('cpu-max').textContent = `${Math.floor(Math.random() * 40) + 20}%`;
+            document.getElementById('memory-current').textContent = `${Math.floor(Math.random() * 6) + 2}GB`;
+            document.getElementById('memory-usage').textContent = `${Math.floor(Math.random() * 40) + 30}%`;
+            document.getElementById('iops-current').textContent = `${Math.floor(Math.random() * 500) + 200}`;
+            document.getElementById('throughput-current').textContent = `${Math.floor(Math.random() * 100) + 20} MB/s`;
+            document.getElementById('network-in').textContent = `${Math.floor(Math.random() * 50) + 5} Mbps`;
+            document.getElementById('network-out').textContent = `${Math.floor(Math.random() * 30) + 5} Mbps`;
+        }
+        
+        function toggleInstanceStatus(instanceId) {
+            const deployments = JSON.parse(localStorage.getItem('yntraaDeployments') || '[]');
+            const instanceIndex = deployments.findIndex(d => d.id === instanceId);
+            
+            if (instanceIndex === -1) return;
+            
+            const newStatus = deployments[instanceIndex].status === 'running' ? 'stopped' : 'running';
+            deployments[instanceIndex].status = newStatus;
+            localStorage.setItem('yntraaDeployments', JSON.stringify(deployments));
+            
+            // Reload the data
+            loadInstanceData(instanceId);
+        }
+        
+        // Helper functions
+        function formatDate(isoString) {
+            try {
+                const date = new Date(isoString);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            } catch {
+                return 'Unknown date';
+            }
+        }
+        
+        function getRegionName(regionCode) {
+            const regions = {
+                'us-east-1': 'Mumbai (NM1)',
+                'us-west-1': 'Delhi (D1)',
+                'eu-central-1': 'Gujrat (G1)',
+                'ap-south-1': 'Asia Pacific (Mumbai)'
+            };
+            return regions[regionCode] || regionCode;
+        }
+    </script>
+</body>
+</html>

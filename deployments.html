@@ -861,13 +861,23 @@ try {
     const tableBody = document.getElementById('deploymentsTableBody');
     const emptyState = document.getElementById('emptyState');
     
-    // Safely get deployments
-    let deployments = [];
+
+// Get filter values
+const typeFilter = document.getElementById('filterType').value;
+    const statusFilter = document.getElementById('filterStatus').value;
+    const regionFilter = document.getElementById('filterRegion').value;
+
+
+
+    
+ // Load deployments with error handling
+ let deployments = [];
     try {
-        const stored = localStorage.getItem('yntraaDeployments');
-        if (stored) deployments = JSON.parse(stored);
+        const storedData = localStorage.getItem('yntraaDeployments');
+        if (storedData) deployments = JSON.parse(storedData);
+        if (!Array.isArray(deployments)) deployments = [];
     } catch (e) {
-        console.error('Failed to load deployments:', e);
+        console.error("Failed to load deployments:", e);
     }
     
     // Clear existing rows
@@ -879,10 +889,15 @@ try {
     }
     
     // Apply filters
-    const filtered = deployments.filter(d => {
-        // Add your filter logic here
-        return true;
+    const filtered = deployments.filter(deployment => {
+        const typeMatch = typeFilter === 'all' || deployment.type === typeFilter;
+        const statusMatch = statusFilter === 'all' || deployment.status === statusFilter;
+        const regionMatch = regionFilter === '' || deployment.region === regionFilter;
+        return typeMatch && statusMatch && regionMatch;
     });
+
+     // Clear existing rows
+     tableBody.innerHTML = '';
     
     if (filtered.length === 0) {
         emptyState.style.display = 'block';
@@ -892,27 +907,27 @@ try {
     emptyState.style.display = 'none';
     
     // Render each deployment
-    filtered.forEach(d => {
+    filtered.forEach(deployment => {
         const row = document.createElement('tr');
-        
-        // Safely access properties with defaults
-        const name = d.name || 'Unnamed';
-        const type = d.type || 'unknown';
-        const status = d.status || 'unknown';
-        
         row.innerHTML = `
-            <td>${name}</td>
-            <td>${type}</td>
-            <td>${getServiceName(d)}</td>
-            <td>${getRegionName(d.region)}</td>
-            <td class="status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</td>
-            <td>${formatDate(d.createdAt)}</td>
-            <td>${d.cost || '$0.00'}</td>
-            <td>${renderActions(d.id, status)}</td>
+            <td>${deployment.name || 'Unnamed'}</td>
+            <td>${deployment.type || 'unknown'}</td>
+            <td>${getServiceName(deployment)}</td>
+            <td>${getRegionName(deployment.region)}</td>
+            <td class="status-${deployment.status || 'unknown'}">
+                ${(deployment.status || 'unknown').charAt(0).toUpperCase() + (deployment.status || 'unknown').slice(1)}
+            </td>
+            <td>${formatDate(deployment.createdAt)}</td>
+            <td>${deployment.cost || '$0.00'}</td>
+            <td>
+                ${renderActions(deployment.id, deployment.status)}
+            </td>
         `;
-        
         tableBody.appendChild(row);
     });
+    // Add event listeners to action buttons
+    addActionListeners();
+
                 
                 // Add event listeners to action buttons
                 document.querySelectorAll('.btn-start').forEach(btn => {
@@ -940,6 +955,33 @@ try {
                 });
             }
             // Helper functions
+
+            function addActionListeners() {
+    document.querySelectorAll('.btn-start').forEach(btn => {
+        btn.addEventListener('click', function() {
+            startDeployment(this.getAttribute('data-id'));
+        });
+    });
+    
+    document.querySelectorAll('.btn-stop').forEach(btn => {
+        btn.addEventListener('click', function() {
+            stopDeployment(this.getAttribute('data-id'));
+        });
+    });
+    
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteDeployment(this.getAttribute('data-id'));
+        });
+    });
+    
+    document.querySelectorAll('.btn-manage').forEach(btn => {
+        btn.addEventListener('click', function() {
+            window.location.href = `manageinstance.html ?id=${this.getAttribute('data-id')}`;
+        });
+    });
+}
+            
 function getServiceName(deployment) {
     if (deployment.type === 'database') {
         return `${deployment.engine || 'DB'} ${deployment.version || ''}`.trim();
