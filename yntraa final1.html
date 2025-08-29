@@ -224,37 +224,71 @@
 .btn-cta-hover:hover {
     background: var(--primary-light);
 }
-        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #f9fafc 0%, #f1f5f9 100%);
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero p {
-            font-size: 20px;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 40px;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        .hero-buttons .btn {
-            padding: 12px 24px;
-            font-size: 16px;
-        }
+    position: relative;
+    padding: 120px 0;
+    text-align: center;
+    overflow: hidden;
+    color: var(--dark);
+  }
+
+  /* Animated Gradient Background */
+  .animated-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(157, 179, 248, 0.6),
+      rgba(209, 250, 229, 0.6),
+      rgba(255, 237, 213, 0.6),
+      rgba(213, 255, 217, 0.6),
+      rgba(255, 213, 213, 0.6),
+      rgba(246, 178, 90, 0.6),
+      rgba(143, 129, 247, 0.6)
+    );
+    background-size: 300% 300%;
+    animation: gradientFlow 10s ease infinite;
+    z-index: 0;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Content Styling */
+  .hero .container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: 20px;
+    color: var(--dark);
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
+
+  .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
         
         /* Features Section */
         .section {
@@ -782,7 +816,217 @@
             margin-right: 10px;
             color: var(--primary);
         }
-        
+        /* Enhanced CTA Section */
+  .cta-section {
+    position: relative;
+    padding: 100px 0;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .cta-gradient-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      rgba(40, 62, 129, 0.98) 25%, 
+      rgba(244, 135, 11, 0.99) 50%,
+      rgba(40, 62, 129, 0.98)75%,
+      rgba(244, 135, 11, 0.99) 100%);
+    background-size: 300% 300%;
+    animation: gradientBG 15s ease infinite;
+    z-index: -1;
+  }
+  
+  .cta-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .cta-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .cta-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 320px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .cta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cta-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cta-card p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .cta-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    min-width: 180px;
+  }
+  
+  .cta-btn.primary {
+    background: white;
+    color: var(--primary);
+  }
+  
+  .cta-btn.primary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+    background-color: #F29F43;
+    color: white;
+  }
+  
+  .cta-btn.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+  
+  .cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    background-color: rgba(79, 70, 229, 0.1);
+    color: #283e81;
+  }
+  
+  .cta-divider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 1rem;
+  }
+  
+  .cta-divider span {
+    display: inline-block;
+    padding: 0 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .cta-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .cta-footer {
+    margin-top: 3rem;
+  }
+  
+  .trust-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .trust-badges span {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  
+  .badges {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .badges img {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+  
+  .badges img:hover {
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .cta-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .cta-divider {
+      margin: 2rem 0;
+      width: 100%;
+    }
+    
+    .trust-badges {
+      flex-direction: column;
+    }
+  }
+  
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
         /* Footer */
         footer {
             background-color: var(--dark);
@@ -1130,6 +1374,167 @@
         .database-engine-selector.show {
             display: block;
         }
+        /* FAQ Section */
+  .faq-item {
+    margin-bottom: 15px;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .faq-question {
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    background: white;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .faq-question:hover {
+    background: var(--primary-light);
+  }
+  
+  .faq-answer {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    background: white;
+  }
+  
+  .faq-item.active .faq-answer {
+    padding: 20px;
+    max-height: 300px;
+  }
+  
+  .faq-item.active .toggle-icon {
+    transform: rotate(45deg);
+  }
+  
+  .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 20px;
+  }
+  
+  .faq-cta {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+
+/* AWS-Style Persistent Navbar */
+  .secondary-nav.aws-nav {
+    --nav-height: 50px;
+    background: linear-gradient(135deg, 
+      rgba(40, 62, 129, 0.98), 
+      rgba(242, 159, 67, 0.90), 
+     /* rgba(16, 185, 129, 0.9),
+      rgba(242, 90, 67, 0.92),*/
+      rgba(40, 62, 129, 0.98));
+    background-size: 300% 300%;
+    height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    animation: gradientBG 15s ease infinite;
+    transition: background-color 0.3s ease;
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* Navbar Content */
+  .aws-nav .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .aws-nav .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .aws-nav ul {
+    display: flex;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    align-items: center;
+  }
+
+  .aws-nav li {
+    list-style: none;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Link Styling */
+  .aws-nav a {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  /* Hover Effect */
+  .aws-nav a:hover {
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Active State */
+  .aws-nav a.active {
+    color: white;
+    font-weight: 600;
+  }
+
+  .aws-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 3px 3px 0 0;
+    animation: underlineGrow 0.3s ease-out;
+  }
+
+  @keyframes underlineGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Section Scroll Padding */
+  section {
+    scroll-margin-top: calc(var(--nav-height) + 20px);
+  }
     </style>
 </head>
 <body>
@@ -1137,7 +1542,7 @@
     <header>
         <div class="container header-container">
             <a href="./Yntraa website.html" class="logo">
-                <img src="./Images/yntraa logo 3.png"  alt="Yntraa Logo">
+                <img src="./Images/yntraa new logo.png"  alt="Yntraa Logo">
                
             </a>
             
@@ -1199,19 +1604,38 @@
                 <a href="https://account.yotta.com/#/register" class="btn btn-primary">Sign Up</a>
             </div>
         </div>
+
+        <!-- AWS-Style Persistent Secondary Navbar -->
+<nav class="secondary-nav aws-nav">
+  <div class="container">
+    <ul >
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#why-choose">Why Choose Yntraa</a></li>
+      <li><a href="#products">Cloud Products</a></li>
+      <li><a href="#solutions">Industry Solutions</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#datacenters">Data Centers</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+</nav>
     </header>
-    
     <!-- Hero Section -->
-    <section class="hero" style="background-image: url(./Images/background\ image2.png);">
-        <div class="container">
-            <h1 >Yntraa Managed DBAAS </h1>
+    <section class="hero">
+  <!-- Animated Gradient Background -->
+  <div class="animated-gradient"></div>
+  
+  <!-- Hero Content -->
+  <div class="container">
+            <h1 >Yntraa Managed DBaaS </h1>
             <p>Yntraa DBaaS provides fully managed database instances with automated scaling, backups, and high availability so you can focus on building your applications.</p>
             <div class="hero-buttons">
                 <a href="./postloginmain.html" class="btn btn-primary">Get Started for Free</a>
                 <a href="#features" class="btn btn-outline">Explore Features</a>
             </div>
-        </div>
-    </section>
+  </div>
+</section>
+   
     
     <!-- Features Section -->
     <section class="section" id="features">
@@ -1355,7 +1779,7 @@
                             <path d="M12 5v14"></path>
                         </svg>
                     </div>
-                    <h3>Relational Databases</h3>
+                    <h3>Yntraa SutraDB (Relational Databases)</h3>
                     <div class="accordion-arrow">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M6 9l6 6 6-6"></path>
@@ -1466,7 +1890,7 @@
                             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                         </svg>
                     </div>
-                    <h3>Non-Relational Databases</h3>
+                    <h3>Yntraa FlexiDB (Non-Relational Databases)</h3>
                     <div class="accordion-arrow">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M6 9l6 6 6-6"></path>
@@ -2040,22 +2464,102 @@
             </div>
         </div>
     </section>
+    <!-- FAQ Section -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <div class="section-title">
+      <h2>Frequently Asked Questions</h2>
+      <p>Find answers to common questions about Yntraa Cloud services</p>
+    </div>
     
-    <!-- CTA Section -->
-    <section class="section" style="background-color: var(--primary); color: white; text-align: center;">
-        <div class="container">
-            <h2 style="color: white; margin-bottom: 20px;">Ready to Get Started?</h2>
-            <p style="max-width: 700px; margin: 0 auto 30px; color: rgba(255,255,255,0.9);">Sign up today and get $100 in credits to explore Yntraa DBaaS.</p>
-            <a href="#" class="btn-cta btn-cta-hover" >Create Free Account</a>
+    <div class="faq-container">
+      <div class="faq-item">
+        <button class="faq-question">
+          What regions does Yntraa Cloud operate in?
+          <span class="toggle-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>We currently operate three datacenters in India (Mumbai, Delhi, and Gujarat) with plans to expand to 2 more locations by 2027.</p>
         </div>
-    </section>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          What compliance certifications do you have?
+          <span class="toggle-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Our datacenters are ISO 27001, SOC 2, and GDPR compliant with infrastructure designed to meet regulatory requirements across industries.</p>
+        </div>
+      </div>
+      
+      <!-- Add 4-6 more FAQ items -->
+    </div>
     
+    <div class="faq-cta">
+      <p>Still have questions? <a href="/contact">Contact our team</a> for more information.</p>
+    </div>
+  </div>
+</section>
+ 
+    <!-- Enhanced CTA Section -->
+<section class="cta-section">
+  <div class="cta-gradient-bg"></div>
+  <div class="container">
+    <div class="cta-content">
+      <h2 style="color: white;">Ready to Get Started?</h2>
+      <p class="cta-subtitle">Sign up today and get $100 in credits to explore Yntraa DBaaS.</p>
+      
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5.507 4.048A3 3 0 017.785 3h8.43a3 3 0 012.278 1.048l1.722 2.008A4.533 4.533 0 0019.5 6h-15c-.243 0-.482.02-.715.056l1.722-2.008z" />
+              <path fill-rule="evenodd" d="M1.5 10.5a3 3 0 013-3h15a3 3 0 110 6h-15a3 3 0 01-3-3zm15 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm2.25.75a.75.75 0 100-1.5.75.75 0 000 1.5zM4.5 15a3 3 0 100 6h15a3 3 0 100-6h-15zm11.25 3.75a.75.75 0 100-1.5.75.75 0 000 1.5zM19.5 18a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 style="color: white;">Start Free Trial</h3>
+          <p>Get $500 in credits for 30 days</p>
+          <a href="/free-trial" class="cta-btn primary">Create Free Account</a>
+        </div>
+        
+        <div class="cta-divider">
+          <span>OR</span>
+        </div>
+        
+        <div class="cta-card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 style="color: white;">Talk to an Expert</h3>
+          <p>Get personalized consultation</p>
+          <a href="/contact-sales" class="cta-btn secondary">Contact Sales</a>
+        </div>
+      </div>
+      
+      <div class="cta-footer">
+        <div class="trust-badges">
+          <span>Trusted by:</span>
+          <div class="badges">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="Client 1" width="40">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg" alt="Client 2" width="90">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Client 3" width="100">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-links">
-                    <a href="/" class="footer-logo">Yntraa</a>
+                    <a href="/" class="footer-logo">
+                        <img src="./Images/Yntraa Logo_Final-02.png" alt="Yntraa Cloud Logo" style="height: 120px; margin-bottom: 1px;">
+                    </a>
                     <p style="color: var(--light-gray); margin-bottom: 20px;">The developer cloud for modern applications</p>
                     <div class="social-links">
                         <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
@@ -2712,6 +3216,106 @@ document.querySelector('.accordion-content').style.display = 'block';
         
         // Initialize database type selection
         databaseTypeOptions[0].click(); // Select Relational by default
+
+
+
+        // Enhanced Persistent Navbar with Reliable Section Detection
+  document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.aws-nav a');
+    const navbar = document.querySelector('.aws-nav');
+    let lastActive = '';
+
+    // Throttle scroll events for performance
+    let isScrolling;
+    window.addEventListener('scroll', function() {
+      window.clearTimeout(isScrolling);
+      isScrolling = setTimeout(function() {
+        detectActiveSection();
+      }, 50);
+    }, { passive: true });
+
+    // Improved active section detection
+    function detectActiveSection() {
+      let current = '';
+      const scrollPosition = window.pageYOffset + 170;
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollPosition >= sectionTop && 
+            scrollPosition < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      if (current && current !== lastActive) {
+        lastActive = current;
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === `#${current}`) {
+            item.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // Initialize first detection
+    detectActiveSection();
+
+    // Smooth scrolling with proper offset
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+          window.scrollTo({
+            top: targetSection.offsetTop - 70,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  });
+
+  // Simple animation for feature cards on scroll
+        const animateOnScroll = () => {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    card.style.transition = `transform 0.5s ease ${index * 0.1}s, box-shadow 0.5s ease ${index * 0.1}s`;
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Run once on page load
+        animateOnScroll();
+        
+        // Then run on scroll
+        window.addEventListener('scroll', animateOnScroll);
+
+         // FAQ Accordion Functionality
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const item = question.parentNode;
+      item.classList.toggle('active');
+      
+      // Close other open items
+      document.querySelectorAll('.faq-item').forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('active')) {
+          otherItem.classList.remove('active');
+        }
+      });
+    });
+  });
     </script>
 
 </body></html>

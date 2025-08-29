@@ -231,57 +231,99 @@
         }
 
         /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #f9fafc 0%, #f1f5f9 100%);
-            padding: 100px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+         .hero {
+    position: relative;
+    padding: 120px 0;
+    text-align: center;
+    overflow: hidden;
+    color: var(--dark);
+  }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('./Images/cloud-bg-pattern.png');
-            background-size: cover;
-            opacity: 0.05;
-            z-index: 0;
-        }
+  /* Animated Gradient Background */
+  .animated-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(157, 179, 248, 0.6),
+      rgba(209, 250, 229, 0.6),
+      rgba(255, 237, 213, 0.6),
+      rgba(213, 255, 217, 0.6),
+      rgba(255, 213, 213, 0.6),
+      rgba(246, 178, 90, 0.6),
+      rgba(143, 129, 247, 0.6)
+    );
+    background-size: 300% 300%;
+    animation: gradientFlow 10s ease infinite;
+    z-index: 0;
+  }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
+  /* Content Styling */
+  .hero .container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 
-        .hero p {
-            font-size: 20px;
-            color: var(--gray);
-            max-width: 700px;
-            margin: 0 auto 40px;
-        }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
 
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
+  .hero p {
+    font-size: 20px;
+    color: var(--dark);
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
 
-        .hero-buttons .btn {
-            padding: 12px 24px;
-            font-size: 16px;
-        }
+  .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
 
+  /* Button Styles */
+  .btn {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 16px;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-outline:hover {
+    background-color: rgba(79, 70, 229, 0.1);
+  }
         /* Features Section */
         .section {
             padding: 80px 0;
@@ -520,24 +562,217 @@
             font-size: 14px;
         }
 
-        /* CTA Section */
-        .cta-section {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 80px 0;
-        }
-
-        .cta-section h2 {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .cta-section p {
-            max-width: 700px;
-            margin: 0 auto 30px;
-            color: rgba(255,255,255,0.9);
-        }
+          /* Enhanced CTA Section */
+  .cta-section {
+    position: relative;
+    padding: 100px 0;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .cta-gradient-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      rgba(40, 62, 129, 0.98) 25%, 
+      rgba(244, 135, 11, 0.99) 50%,
+      rgba(40, 62, 129, 0.98)75%,
+      rgba(244, 135, 11, 0.99) 100%);
+    background-size: 300% 300%;
+    animation: gradientBG 15s ease infinite;
+    z-index: -1;
+  }
+  
+  .cta-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .cta-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .cta-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 320px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .cta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cta-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cta-card p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .cta-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    min-width: 180px;
+  }
+  
+  .cta-btn.primary {
+    background: white;
+    color: var(--primary);
+  }
+  
+  .cta-btn.primary:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+    background-color: #F29F43;
+    color: white;
+  }
+  
+  .cta-btn.secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+  
+  .cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    background-color: rgba(79, 70, 229, 0.1);
+    color: #283e81;
+  }
+  
+  .cta-divider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 1rem;
+  }
+  
+  .cta-divider span {
+    display: inline-block;
+    padding: 0 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .cta-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .cta-footer {
+    margin-top: 3rem;
+  }
+  
+  .trust-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .trust-badges span {
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  
+  .badges {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .badges img {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+  
+  .badges img:hover {
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .cta-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .cta-divider {
+      margin: 2rem 0;
+      width: 100%;
+    }
+    
+    .trust-badges {
+      flex-direction: column;
+    }
+  }
+  
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
         /* Footer */
         footer {
@@ -582,7 +817,7 @@
         }
 
         .footer-links ul li a:hover {
-            color: var(--primary);
+            color: var(--primary-dark);
         }
 
         .footer-bottom {
@@ -667,6 +902,257 @@
                 gap: 15px;
             }
         }
+        
+        /* Datacenter Map Section */
+ .datacenters {
+    background: #f8fafc;
+    padding: 80px 0;
+  }
+  
+  .datacenter-map-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  .india-map {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: hue-rotate(-10deg) saturate(1.2);
+  }
+  
+  .marker {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(40, 62, 129, 0.5);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+  
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  
+  .marker:hover .tooltip {
+    opacity: 1;
+  }
+  
+  .datacenter-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+  
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  /* FAQ Section */
+  .faq-item {
+    margin-bottom: 15px;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .faq-question {
+    width: 100%;
+    padding: 20px;
+    text-align: left;
+    background: white;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .faq-question:hover {
+    background: var(--primary-light);
+  }
+  
+  .faq-answer {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    background: white;
+  }
+  
+  .faq-item.active .faq-answer {
+    padding: 20px;
+    max-height: 300px;
+  }
+  
+  .faq-item.active .toggle-icon {
+    transform: rotate(45deg);
+  }
+  
+  .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 20px;
+  }
+  
+  .faq-cta {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+
+/* AWS-Style Persistent Navbar */
+  .secondary-nav.aws-nav {
+    --nav-height: 50px;
+    background: linear-gradient(135deg, 
+      rgba(40, 62, 129, 0.98), 
+      rgba(242, 159, 67, 0.92), 
+      rgba(16, 185, 129, 0.9),
+      rgba(242, 90, 67, 0.92),
+      rgba(40, 62, 129, 0.98));
+    background-size: 300% 300%;
+    height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    animation: gradientBG 15s ease infinite;
+    transition: background-color 0.3s ease;
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* Navbar Content */
+  .aws-nav .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .aws-nav .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .aws-nav ul {
+    display: flex;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    align-items: center;
+  }
+
+  .aws-nav li {
+    list-style: none;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Link Styling */
+  .aws-nav a {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    
+  }
+
+  /* Hover Effect */
+  .aws-nav a:hover {
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Active State */
+  .aws-nav a.active {
+    color: white;
+    font-weight: 600;
+  }
+
+  .aws-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 3px 3px 0 0;
+    animation: underlineGrow 0.3s ease-out;
+  }
+
+  @keyframes underlineGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Section Scroll Padding */
+  section {
+    scroll-margin-top: calc(var(--nav-height) + 20px);
+  }
+ 
     </style>
 </head>
 <body>
@@ -674,7 +1160,7 @@
     <header>
         <div class="container header-container">
             <a href="./Yntraa website.html" class="logo">
-                <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo">
+                <img src="./Images/yntraa new logo.png" alt="Yntraa Cloud Logo">
                 <span></span>
             </a>
             
@@ -753,22 +1239,40 @@
                 <a href="https://account.yntraa.com/register" class="btn btn-primary">Sign Up</a>
             </div>
         </div>
+        <!-- Add this right after your existing header -->
+<!-- AWS-Style Persistent Secondary Navbar -->
+<nav class="secondary-nav aws-nav">
+  <div class="container">
+    <ul >
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#why-choose">Why Choose Yntraa</a></li>
+      <li><a href="#products">Cloud Products</a></li>
+      <li><a href="#solutions">Industry Solutions</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#datacenters">Data Centers</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+</nav>
     </header>
-    
     <!-- Hero Section -->
-    <section class="hero" style="background-image: url(./Images/background\ image2.png);">
-        <div class="container hero-content">
-            <h1>Enterprise Cloud Solutions for the Digital Era</h1>
-            <p>Yntraa Cloud provides secure, scalable infrastructure and platform services to power your business transformation</p>
-            <div class="hero-buttons">
-                <a href="./postloginmain.html" class="btn btn-primary">Start Free Trial</a>
-                <a href="/contact" class="btn btn-outline">Contact Sales</a>
-            </div>
-        </div>
-    </section>
+    <section class="hero" id="overview">
+  <!-- Animated Gradient Background -->
+  <div class="animated-gradient"></div>
+  
+  <!-- Hero Content -->
+  <div class="container">
+    <h1>Enterprise Cloud Solutions for the Digital Era</h1>
+    <p>Yntraa Cloud provides secure, scalable infrastructure and platform services to power your business transformation</p>
+    <div class="hero-buttons">
+      <a href="./postloginmain.html" class="btn btn-primary">Start Free Trial</a>
+      <a href="/contact" class="btn btn-outline">Contact Sales</a>
+    </div>
+  </div>
+</section>
     
     <!-- Features Section -->
-    <section class="section">
+    <section class="section" id="why-choose">
         <div class="container">
             <div class="section-title">
                 <h2>Why Choose Yntraa Cloud</h2>
@@ -840,7 +1344,7 @@
     </section>
     
     <!-- Products Showcase -->
-    <section class="section products-showcase">
+    <section class="section products-showcase" id="products">
         <div class="container">
             <div class="section-title">
                 <h2>Our Cloud Products</h2>
@@ -906,7 +1410,7 @@
     </section>
     
     <!-- Solutions Section -->
-    <section class="section solutions">
+    <section class="section solutions" id="solutions">
         <div class="container">
             <div class="section-title">
                 <h2>Industry Solutions</h2>
@@ -1035,7 +1539,7 @@
     </section>
     
     <!-- Testimonials -->
-    <section class="section testimonials">
+    <section class="section testimonials" id="testimonials">
         <div class="container">
             <div class="section-title">
                 <h2>Trusted by Leading Enterprises</h2>
@@ -1048,7 +1552,7 @@
                         "Yntraa Cloud has transformed our media operations. The performance and reliability of their platform allowed us to reduce our encoding times by 40% while improving quality. The hassle to manage huge data and our day to day complexities has reduced a lot thanks to Yntraa."
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/C5603AQEnjxuQQQS4jA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1643878683001?e=1754524800&v=beta&t=6coLNHyIkMK65lDhlUv0nP__bYNlxfg2vAcm2BdY6B4" alt="Rajesh Kumar">
+                        <img src="https://media.licdn.com/dms/image/v2/C5603AQEnjxuQQQS4jA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1643878683001?e=1757548800&v=beta&t=VEJe2fQQgdy9gK-83N5if590nkFppbhJlk-co3QFocw" alt="Rajesh Kumar">
                         <div class="testimonial-author-info">
                             <h4>Vedant Mundhe</h4>
                             <p>CTO, Run.ai</p>
@@ -1061,7 +1565,7 @@
                         "As for any company giving services, security and compliance are paramount. Yntraa Cloud met all our requirements while providing the flexibility we needed to innovate. From compute to Databases to all the advance services they have got you all covered."
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/C4D03AQHxngrwO4gr2g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1571261753421?e=1754524800&v=beta&t=gPNOxncQFDEJkWx3mNAMNXgSs1dFEkBxwSUg36-t4x4" alt="Priya Sharma">
+                        <img src="https://media.licdn.com/dms/image/v2/C4D03AQHxngrwO4gr2g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1571261753421?e=1757548800&v=beta&t=wOmu514ZzW08G0ZZRJdrOJAuQ-3sUpGkUjZhleslE-g" alt="Priya Sharma">
                         <div class="testimonial-author-info">
                             <h4>Anirudh Singh</h4>
                             <p>CIO,Head of IT, Shakti</p>
@@ -1074,7 +1578,7 @@
                         "The support team at Yntraa is exceptional. They've gone above and beyond to help us optimize our infrastructure and reduce costs without compromising performance. Specially their DBAAS product is amazing which helped save our time and focus on the innovation. "
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQH7r2cpRPUn-g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1685974567678?e=1754524800&v=beta&t=enqSLFuX21lh1-HO02EsEI2q0BucqQJRBgpT55R64ao" alt="Amit Patel">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQH7r2cpRPUn-g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1685974567678?e=1757548800&v=beta&t=bFt0iuWrh0oRnIG9nUG7aYqW94cy_C-8VEkC4wIVWV0" alt="Amit Patel">
                         <div class="testimonial-author-info">
                             <h4>Suraj Pankaj</h4>
                             <p>Director of Engineering, Shakti Cloud</p>
@@ -1086,7 +1590,7 @@
                         "Their DBaaS offering has been a particular game-changer. It has dramatically freed up our team's time, allowing us to shift our focus from routine database management to driving innovation and developing new automation solutions. Yntraa has directly contributed to our ability to achieve our automation goals more efficiently and effectively. "
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/C5103AQHg9OBQyuDSPg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1520168287165?e=1754524800&v=beta&t=_lnef3sIdB0PxmD6ic21e1WMnsM-Y2cZcH8dGY2Loys" alt="Amit Patel">
+                        <img src="https://media.licdn.com/dms/image/v2/C5103AQHg9OBQyuDSPg/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1520168287134?e=1757548800&v=beta&t=zyP-EvGpFwP7NtAsJKAu_JxizhGpOzyIQQywHMI2qJU" alt="Amit Patel">
                         <div class="testimonial-author-info">
                             <h4>Siddhesh Palande</h4>
                             <p>Head of Cloud Automation, OneYotta</p>
@@ -1098,7 +1602,7 @@
                         "Yntraa provides the robust and flexible platform. Their comprehensive suite of services and responsive support have allowed us to manage our cloud resources with greater agility and confidence, ultimately enabling our teams to focus on strategic initiatives rather than operational complexities. Yntraa is a key enabler of our cloud management success."
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQHa0DShGK6jSA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1678550962008?e=1754524800&v=beta&t=Nu2g6HKk6agzlAI8tvMLbOimnNPCkNvubG-0za496bo" alt="Amit Patel">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQHa0DShGK6jSA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1678550962008?e=1757548800&v=beta&t=xiv4d7SfGkoye5DODzszy7_4Xi8FyDOROKBb7DYOQgI" alt="Amit Patel">
                         <div class="testimonial-author-info">
                             <h4>Shraddha Bhange</h4>
                             <p>Head of Cloud Management, Yotta</p>
@@ -1110,7 +1614,7 @@
                         "Yntraa has proven to be the indispensable backbone for Dhristicam. Its high performance and reliability ensure our AI processes video seamlessly, and its scalability effortlessly manages our growing surveillance needs. It empowers us to deliver cutting-edge security solutions, allowing our team to focus on innovation in surveillance technologies."
                     </div>
                     <div class="testimonial-author">
-                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQEOpB5XyGYlMA/profile-displayphoto-shrink_100_100/B4DZN5DX7YHMAY-/0/1732902754626?e=1754524800&v=beta&t=F6FAk13qTwDX9cDOrGd0NT3pyLgdMnERM5X5xy2_CHc" alt="Amit Patel">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQEOpB5XyGYlMA/profile-displayphoto-shrink_400_400/B4DZN5DX7YHMAk-/0/1732902754626?e=1757548800&v=beta&t=q3UfRqmFxi4grE1ahad596UCGGGfpkp0BT-D-vUEmT8" alt="Amit Patel">
                         <div class="testimonial-author-info">
                             <h4>Siddhesh Alone</h4>
                             <p>CDO,Head of Surveillance, DrishtiCam</p>
@@ -1120,18 +1624,160 @@
             </div>
         </div>
     </section>
+    <!-- Datacenter Map Section -->
+<section class="section datacenters" id="datacenters">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our India Datacenter Locations</h2>
+      <p>Yntraa Cloud operates state-of-the-art facilities across India for low-latency performance</p>
+    </div>
     
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to Transform Your Business with Cloud?</h2>
-            <p>Join thousands of businesses that trust Yntraa Cloud for their critical workloads. Get started today with a free trial or talk to our experts.</p>
-            <div class="hero-buttons">
-                <a href="/free-trial" class="btn-cta btn-cta-hover">Start Free Trial</a>
-                <a href="/contact" class="btn btn-outline" style="background: transparent; color: white; border-color: white;">Contact Sales</a>
-            </div>
+    <div class="datacenter-map-container">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/India_location_map.svg" alt="India Map" class="india-map">
+      
+      <div class="datacenter-markers">
+        <!-- Mumbai (NM1) -->
+        <div class="marker" style="top: 55%; left: 20%;" data-city="mumbai">
+          <div class="pulse"></div>
+          <span>NM1</span>
+          <div class="tooltip">Mumbai Datacenter</div>
         </div>
-    </section>
+        
+        <!-- Delhi (D1) -->
+        <div class="marker" style="top: 35%; left: 35%;" data-city="delhi">
+          <div class="pulse"></div>
+          <span>D1</span>
+          <div class="tooltip">Delhi Datacenter</div>
+        </div>
+        
+        <!-- Gujarat (G1) -->
+        <div class="marker" style="top: 47%; left: 20%;" data-city="gujarat">
+          <div class="pulse"></div>
+          <span>G1</span>
+          <div class="tooltip">Gujarat Datacenter</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="datacenter-cards">
+      <div class="card" data-city="mumbai">
+        <h3>NM1 - Mumbai</h3>
+        <p>Our flagship Tier IV facility</p>
+        <ul>
+          <li>100Gbps network</li>
+          <li>24/7 security</li>
+          <li>99.99% uptime</li>
+        </ul>
+      </div>
+      <!-- Repeat for Delhi and Gujarat -->
+       <div class="card" data-city="mumbai">
+        <h3>D1 - Delhi</h3>
+        <p>Northern India hub</p>
+        <ul>
+          <li>Low-latency connectivity</li>
+          <li>Disaster recovery site</li>
+          <li>Hybrid cloud ready</li>
+        </ul>
+      </div>
+      <div class="card" data-city="mumbai">
+        <h3>G1 - Gujarat</h3>
+        <p>Western India presence</p>
+        <ul>
+          <li>Green energy powered</li>
+          <li>High-density compute</li>
+          <li>Edge networking</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FAQ Section -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <div class="section-title">
+      <h2>Frequently Asked Questions</h2>
+      <p>Find answers to common questions about Yntraa Cloud services</p>
+    </div>
+    
+    <div class="faq-container">
+      <div class="faq-item">
+        <button class="faq-question">
+          What regions does Yntraa Cloud operate in?
+          <span class="toggle-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>We currently operate three datacenters in India (Mumbai, Delhi, and Gujarat) with plans to expand to 2 more locations by 2027.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          What compliance certifications do you have?
+          <span class="toggle-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Our datacenters are ISO 27001, SOC 2, and GDPR compliant with infrastructure designed to meet regulatory requirements across industries.</p>
+        </div>
+      </div>
+      
+      <!-- Add 4-6 more FAQ items -->
+    </div>
+    
+    <div class="faq-cta">
+      <p>Still have questions? <a href="/contact">Contact our team</a> for more information.</p>
+    </div>
+  </div>
+</section>
+    <!-- Enhanced CTA Section -->
+<section class="cta-section">
+  <div class="cta-gradient-bg"></div>
+  <div class="container">
+    <div class="cta-content">
+      <h2 style="color: white;">Ready to Transform Your Business with Cloud?</h2>
+      <p class="cta-subtitle">Join thousands of businesses that trust Yntraa Cloud for their critical workloads</p>
+      
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5.507 4.048A3 3 0 017.785 3h8.43a3 3 0 012.278 1.048l1.722 2.008A4.533 4.533 0 0019.5 6h-15c-.243 0-.482.02-.715.056l1.722-2.008z" />
+              <path fill-rule="evenodd" d="M1.5 10.5a3 3 0 013-3h15a3 3 0 110 6h-15a3 3 0 01-3-3zm15 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm2.25.75a.75.75 0 100-1.5.75.75 0 000 1.5zM4.5 15a3 3 0 100 6h15a3 3 0 100-6h-15zm11.25 3.75a.75.75 0 100-1.5.75.75 0 000 1.5zM19.5 18a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 style="color: white;">Start Free Trial</h3>
+          <p>Get $500 in credits for 30 days</p>
+          <a href="/free-trial" class="cta-btn primary">Get Started</a>
+        </div>
+        
+        <div class="cta-divider">
+          <span>OR</span>
+        </div>
+        
+        <div class="cta-card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 style="color: white;">Talk to an Expert</h3>
+          <p>Get personalized consultation</p>
+          <a href="/contact-sales" class="cta-btn secondary">Contact Sales</a>
+        </div>
+      </div>
+      
+      <div class="cta-footer">
+        <div class="trust-badges">
+          <span>Trusted by:</span>
+          <div class="badges">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="Client 1" width="40">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Microsoft_Azure_Logo.svg" alt="Client 2" width="90">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Client 3" width="100">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     
     <!-- Footer -->
     <footer>
@@ -1139,7 +1785,7 @@
             <div class="footer-grid">
                 <div class="footer-links">
                     <a href="/" class="footer-logo">
-                        <img src="./Images/yntraa logo 3.png" alt="Yntraa Cloud Logo" style="height: 40px; margin-bottom: 15px;">
+                        <img src="./Images/Yntraa Logo_Final-02.png" alt="Yntraa Cloud Logo" style="height: 120px; margin-bottom: 1px;">
                     </a>
                     <p style="color: var(--light-gray); margin-bottom: 20px;">Enterprise cloud solutions for the digital era.</p>
                     <div class="social-links">
@@ -1153,8 +1799,8 @@
                 <div class="footer-links">
                     <h3>Products</h3>
                     <ul>
-                        <li><a href="/compute">Compute</a></li>
-                        <li><a href="/database">Database</a></li>
+                        <li><a href="./yntraacompute.html">Compute</a></li>
+                        <li><a href="./yntraa final1.html">Database</a></li>
                         <li><a href="/storage">Storage</a></li>
                         <li><a href="/network">Networking</a></li>
                         <li><a href="/security">Security</a></li>
@@ -1212,6 +1858,69 @@
     </footer>
 
     <script>
+
+// Enhanced Persistent Navbar with Reliable Section Detection
+  document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.aws-nav a');
+    const navbar = document.querySelector('.aws-nav');
+    let lastActive = '';
+
+    // Throttle scroll events for performance
+    let isScrolling;
+    window.addEventListener('scroll', function() {
+      window.clearTimeout(isScrolling);
+      isScrolling = setTimeout(function() {
+        detectActiveSection();
+      }, 50);
+    }, { passive: true });
+
+    // Improved active section detection
+    function detectActiveSection() {
+      let current = '';
+      const scrollPosition = window.pageYOffset + 170;
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollPosition >= sectionTop && 
+            scrollPosition < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      if (current && current !== lastActive) {
+        lastActive = current;
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === `#${current}`) {
+            item.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // Initialize first detection
+    detectActiveSection();
+
+    // Smooth scrolling with proper offset
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+          window.scrollTo({
+            top: targetSection.offsetTop - 70,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  });
+
         // Solutions tab functionality
         const solutionTabs = document.querySelectorAll('.solution-tab');
         const solutionContents = document.querySelectorAll('.solution-content');
@@ -1274,6 +1983,30 @@
         
         // Then run on scroll
         window.addEventListener('scroll', animateOnScroll);
+
+         // FAQ Accordion Functionality
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const item = question.parentNode;
+      item.classList.toggle('active');
+      
+      // Close other open items
+      document.querySelectorAll('.faq-item').forEach(otherItem => {
+        if (otherItem !== item && otherItem.classList.contains('active')) {
+          otherItem.classList.remove('active');
+        }
+      });
+    });
+  });
+  
+  // Datacenter Map Interactions
+  document.querySelectorAll('.marker').forEach(marker => {
+    marker.addEventListener('click', function() {
+      const city = this.getAttribute('data-city');
+      alert(`Showing details for ${city} datacenter`);
+    });
+  });
+
     </script>
 </body>
 </html>
